@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '../axios-auth';
 export default {
   data() {
     return {
@@ -131,20 +131,24 @@ export default {
     // サーバーに作成ユーザー情報を送信 Axios
     createUser() {
       axios.post(
-        "https://firestore.googleapis.com/v1/projects/tsugitasu/databases/(default)/documents/users",
+        "/accounts:signUp?key=AIzaSyAPB2czXhQOikXKJ5EWTN2A7SifWJ06woc",
         {
-          // 今回はFirebaseに沿ったデータオブジェクトを用意
-          fields: {
-            email: {
-              stringValue: this.email
-            },
-            pass: {
-              stringValue: this.pass
-            },
-            username: {
-              stringValue: this.username
-            },
-          }
+          email: this.email,
+          password: this.pass,
+          returnSecureToken: true,
+
+          // ユーザー情報を含むものはテスト用に一旦削除
+          // fields: {
+          //   email: {
+          //     stringValue: this.email
+          //   },
+          //   pass: {
+          //     stringValue: this.pass
+          //   },
+          //   username: {
+          //     stringValue: this.username
+          //   },
+          // }
         }
       )
       .then(response => {
