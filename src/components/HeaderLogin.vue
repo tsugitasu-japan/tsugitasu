@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="header__left">
-      <router-link class="link_style" to="/"><img src="../assets/logo.svg"></router-link>
+      <router-link class="link_style" to="/dashboard"><img src="../assets/logo.svg"></router-link>
     </div>
 
     <div class="header__right">
@@ -18,7 +18,7 @@
         </button>
       </div>
       <!-- プロフィールメニュー -->
-      <div class="profile_menu_contnair">
+      <div class="profile_menu_contnair" :class="{bg_white:isShowMenu}">
         <div class="plofile_allshow" @click="isOpenMenu">
           <div class="profile_menu_left">
             <!-- <div class="test"></div> -->
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="profile_changeshow" v-if="isShowMenu">
-          <routerLink to="/" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
+          <routerLink to="/profile" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
           <routerLink to="/" class="prfile_menu_p prfile_menu_link_style">ログアウト</routerLink>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       SeachKeywords: '',
-      UserName: '長町放送局高番銃号',
+      UserName: '小島聡太テスト',
       isShowMenu:false,
       CutUserName:'',
     }
@@ -95,9 +95,9 @@ header {
   padding: 0 210px 0 24px;
   height: 69px;
   border-bottom: 1px solid #ECECEC;
-  // .header__left{
-
-  // }
+  .header__left{
+        padding: 15px 0 15px 0px;
+  }
   .header__right {
     display: flex;
     align-items: center;
@@ -193,28 +193,31 @@ header {
       width: 170px;
       background-color: #EBF1F1;
       border-radius: 4px;
-      padding: 10px 12px 10px 14px;
+      padding: 9px 12px 9px 14px;
+      transition: .2s;
+      &.bg_white{
+        background-color: #FFFFFF;
+        box-shadow: 0px 3px 20px rgba(75,75,75,0.16);
+      }
 
       .plofile_allshow {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
+        padding: 1px 0;
         .profile_menu_right{
-          .relote90{
+          img{
+            transition: .2s;
+            &.relote90{
             transform: rotate(-90deg);
+          }
           }
         }
         .profile_menu_left {
           display: flex;
           align-items: center;
-          .test {
-            width: 25px;
-            height: 25px;
-            border-radius: 12.5px;
-            margin-right: 8px;
-            background-color:#80A8A8;
-          }
+
 
           .user_name {
             letter-spacing: 0.5px;
@@ -228,8 +231,9 @@ header {
       .profile_changeshow{
         display: flex;
         flex-direction: column;
-        padding-top: 15px;
+        padding-top: 14px;
         padding-bottom: 5px;
+        display: inline-block;
         .prfile_menu_p{
             letter-spacing: 0.4px;
             color: #8a8a8a;
@@ -237,15 +241,18 @@ header {
             font-weight: 400;
             font-size: 14px;
             transition: .15s;
+            display: block;
+            
             &:hover{
               color:$main-hover;
             }
         }
         .prfile_menu_link_style{
           text-decoration: none;
+          display: inline-block;
         }
         .menu_margin{
-          margin-bottom: 13px;
+          margin-bottom: 14px;
         }
       }
     }
