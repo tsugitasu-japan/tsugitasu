@@ -15,12 +15,81 @@
       </div>
     </div>
 
-    <div class="myclass__display__area">
-
+    <div class="my_created_class_display_area my_created_class_display_area_layout">
+      <div class="my_created_class_contnair" v-for="userClassList in userClassLists" :key="userClassList">
+        <div class="my_created_class_icon" :class="userClassList.selectedBgColor">
+          <img class="my_create_class_mark_layout my_create_class_mark_size" :src="userClassList.selectedMark">
+        </div>
+        <p class="my_created_class_name class_name_margin">{{ userClassList.title }}</p>
+      </div>
     </div>
   </div>
 
 </template>
+
+<script>
+export default {
+  data() {
+    const colors = new Map([
+      ["yellow", "#F8DF72"],
+      ["red", "#F06A6A"],
+      ["peach", "#EC8D71"],
+      ["orange", "#F1BD6C"],
+      ["rightgreen", "#70CA70"],
+      ["green", "#309E30"],
+      ["rightblue", "#9EE7E3"],
+      ["blue", "#4573D2"],
+      ["cepia", "#13CCCE"],
+      ["purple", "#B36BD4"],
+      ["rightpink", "#F9AAEF"],
+      ["pink", "#F26FB2"],
+      ["blood", "#AA5D5D"],
+      ["grey", "#C7C4C4"],
+      ["rightblack", "#6D6E6F"],
+    ]);
+    return {
+      colors,
+      // ユーザーの作成した授業のアイコン情報を配列で取得
+      userClassLists: [
+        {
+          title: '作成した授業名',
+          selectedBgColor: "yellow",
+          selectedMark: require('@/assets/class-icon-on/meeting.svg'),
+          link: ''
+        },
+        {
+          title: '作成した授業名2',
+          selectedBgColor: "yellow",
+          selectedMark: require('@/assets/class-icon-on/house.svg'),
+          link: ''
+        },
+                {
+          title: '作成した授業名2',
+          selectedBgColor: "yellow",
+          selectedMark: require('@/assets/class-icon-on/house.svg'),
+          link: ''
+        },
+                {
+          title: '作成した授業名2',
+          selectedBgColor: "yellow",
+          selectedMark: require('@/assets/class-icon-on/house.svg'),
+          link: ''
+        },
+                {
+          title: '作成した授業名2',
+          selectedBgColor: "yellow",
+          selectedMark: require('@/assets/class-icon-on/house.svg'),
+          link: ''
+        },
+
+      ]
+    }
+  },
+  computed: {
+    bgSelected() { return { backgroundColor: this.colors.get(this.userClassLists.selectedBgColor) }; },
+  }
+}
+</script>
 
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
@@ -29,11 +98,27 @@ $main-color: #13CCCE;
 $main-hover: #26ABAD;
 $black: #2B2B2B;
 $bg-color: #FBFBFB;
+$yellow: #F8DF72;
+$red: #F06A6A;
+$peach: #EC8D71;
+$orange: #F1BD6C;
+$rightgreen: #70CA70;
+$green: #309E30;
+$blue: #4573D2;
+$rightblue: #9EE7E3;
+$cepia: #13CCCE;
+$purple: #B36BD4;
+$rightpink: #F9AAEF;
+$pink: #F26FB2;
+$blood: #AA5D5D;
+$grey: #C7C4C4;
+$rightblack: #6D6E6F;
 
 .dashboard_right {
   display: flex;
   flex-direction: column;
   width: calc(100% - 221px);
+
   .search_contnair {
     padding: 17px 24px 17px 19px;
     background-color: $bg-color;
@@ -122,11 +207,83 @@ $bg-color: #FBFBFB;
       }
     }
   }
-  .myclass__display__area{
+
+  .my_created_class_display_area {
     height: calc(100vh - 150px);
     overflow-y: scroll;
     background-color: $bg-color;
+    padding: 10px 15px;
 
+    &.my_created_class_display_area_layout {
+      display: flex;
+flex-wrap: wrap;
+
+      gap: 17px 27px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #c5c5c5;
+      border-radius: 100px;
+    }
+
+    .my_created_class_contnair {
+      transition: .3s ease-out;
+      padding: 14px 15px 11px 15px;
+      border-radius: 27px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #F5F5F5;
+      }
+
+      &:hover .my_created_class_icon {
+        transform: translateY(-2px);
+      }
+
+      .my_created_class_icon {
+        width: 126px;
+        height: 126px;
+        border-radius: 22.4%;
+        position: relative;
+        transition: .3s ease-out;
+
+        &.yellow {
+          background-color: $yellow;
+        }
+
+        .my_create_class_mark_layout {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+        }
+
+        .my_create_class_mark_size {
+          width: 63.2%;
+        }
+      }
+
+      .my_created_class_name {
+        font-family: $main-font-family;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        color: $black;
+      }
+
+      .class_name_margin {
+        margin-top: 16px;
+      }
+    }
   }
 }
 </style>

@@ -26,8 +26,7 @@
               <div class="bg_selecter_changeshow bg_selecter_grid_layout" v-show="isShowBgSelecter">
                 <div class="bg_color_select_button" :class="colorName" @click="selectBgColor(colorName)"
                   v-for="[colorName] in Array.from(colors)" :key="colorName">
-                  <img src="../assets/checked.svg" class="check_icon icon_on" ref="yellow_button"
-                    v-show="selectedBgColor === colorName">
+                  <img src="../assets/checked.svg" class="check_icon icon_on" v-show="selectedBgColor === colorName">
                 </div>
 
               </div>
@@ -192,32 +191,32 @@
       <!-- セッティング詳細 -->
       <div class="classrelease_setting_inner" v-show="isClassReleaseSettingOpen">
         <div class="release_setting_radio_button_area">
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting()">
-            <div class="circle circle_margin">
-              <div class="innner_circle"></div>
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting(0)">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 0 }">
             </div>
-            <p class="radio_button_label">パブリック</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 0 }">パブリック</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting()">
-            <div class="circle circle_margin">
-              <div class="innner_circle"></div>
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting(1)">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 1 }">
             </div>
-            <p class="radio_button_label">プライベート</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 1 }">プライベート</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting()">
-            <div class="circle circle_margin">
-              <div class="innner_circle"></div>
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting(2)">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 2 }">
             </div>
-            <p class="radio_button_label">許可した人のみ</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 2 }">許可した人のみ</p>
           </div>
         </div>
         <div class="release_selected_explain_area">
-          <p class="release_selected_explain">誰でもあなたの授業を閲覧し、参考にすることができます</p>
-          <p class="release_selected_explain">あなたのみが閲覧・編集できます</p>
-          <p class="release_selected_explain">あなたの許可した人物のみが閲覧できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 0">誰でもあなたの授業を閲覧し、参考にすることができます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 1">あなたのみが閲覧・編集できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 2">あなたの許可した人物のみが閲覧できます</p>
         </div>
       </div>
     </section>
+
+    <!-- 作成ボタン -->
+    <button class="submit_button" @click="login">以上の内容で作成</button>
   </div>
 </template>
 
@@ -259,7 +258,7 @@ export default {
       tag_inputed: '',
       hash_tag_inputed: '',
       classTags: [],
-      selectedRelease: "public",
+      selectedRelease: 0,
     }
   },
   computed: {
@@ -416,7 +415,7 @@ export default {
     settedTagDelete(index) {
       this.classTags.splice(index, 1);
     },
-    // 公開範囲選択メソッド
+    // 公開範囲選択ラジオボタンメソッド
     SelectReleaseSetting(release) {
       this.selectedRelease = release;
     },
@@ -696,6 +695,15 @@ $main-font-family: 'Noto Sans JP', sans-serif;
                 justify-content: space-between;
                 grid-row-gap: 20px;
                 grid-column-gap: 17px;
+                overflow-y: scroll;
+                height: 232px;
+                &::-webkit-scrollbar{
+                  width: 5px;
+                }
+                &::-webkit-scrollbar-thumb {
+                  background-color: #c5c5c5;
+                  border-radius: 100px;
+                }
               }
 
               .icon_select_button {
@@ -904,28 +912,16 @@ $main-font-family: 'Noto Sans JP', sans-serif;
           height: 16px;
           border-radius: 50%;
           border: 2px solid #E6E6E6;
-          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           &.circle_margin {
             margin-right: 10px;
           }
 
-          .innner_circle {
-            width: 0px;
-            height: 0px;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-          }
-
-          .innner_circle_on {
-            background-color: #13CCCE;
-            width: 10px;
-            height: 10px;
+          &.circle_on {
+            background-color: $main-color;
           }
         }
 
@@ -937,6 +933,10 @@ $main-font-family: 'Noto Sans JP', sans-serif;
           color: #bcbcbc;
           padding-bottom: 2px;
         }
+
+        .radio_button_label_on {
+          color: $main-color;
+        }
       }
     }
 
@@ -946,7 +946,32 @@ $main-font-family: 'Noto Sans JP', sans-serif;
         font-size: 14px;
         font-weight: 400;
         letter-spacing: 0.5px;
-        color: #13CCCE;
+        color: $main-color;
+      }
+    }
+  }
+
+  .submit_button {
+    text-decoration: none;
+    display: block;
+    border-radius: 5px;
+    background-color: #ebebeb;
+    transition: 0.1s ease;
+    border: transparent;
+    font-family: $main-font-family;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #FFFFFF;
+    width: 248px;
+    height: 44px;
+    margin: 40px 0px 60px 0px;
+
+    &:valid {
+      background-color: $main-color;
+
+      &:hover {
+        background-color: $main-hover;
       }
     }
   }
