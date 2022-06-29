@@ -25,7 +25,7 @@ header{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px 16px 24px;
+  padding: 14px 24px 14px 24px;
   border-bottom:1px solid #ECECEC ;
 
   // .header__left{

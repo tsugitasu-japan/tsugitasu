@@ -31,7 +31,7 @@
               <p class="signup_require">必須</p>
             </div>
             <div class="pass_input_contnair">
-              <input class="signup_input_pass" type="password" v-model.lazy="pass" placeholder="8文字以上の半角英数字"
+              <input class="signup_input_pass" type="password" v-model.lazy="password" placeholder="8文字以上の半角英数字"
                 ref="passInput">
               <!-- パスワードの表示・非表示の切り替え -->
               <div class="change_button" @click="changeTypePass">
@@ -72,13 +72,13 @@
 </template>
 
 <script>
-import axios from '../axios-auth';
+
 export default {
   data() {
     return {
       username: '',
       email: '',
-      pass: '',
+      password: '',
       showPass: true,
     };
   },
@@ -88,11 +88,11 @@ export default {
     },
     isPassValid() {
       // 空の時はバリデーションなし
-      if (this.pass === '') return true;
+      if (this.password === '') return true;
       // 半角英数字をそれぞれ1種類以上含む8文字以上100文字以下の正規表現
       const checker = new RegExp(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i);
       //指定した組み合わせになっていなかった場合判定を返す。
-      if (checker.test(this.pass)) return true;
+      if (checker.test(this.password)) return true;
       return false;
     },
     isEmailValid() {
@@ -106,7 +106,7 @@ export default {
     },
     // 全てに入力されているかをバリデーション
     fillValid() {
-      if (this.email != '' && this.pass != '' && this.username != '') return true;
+      if (this.email != '' && this.password != '' && this.username != '') return true;
       return false;
     },
 
@@ -130,32 +130,12 @@ export default {
     },
     // サーバーに作成ユーザー情報を送信 Axios
     createUser() {
-      axios.post(
-        "/accounts:signUp?key=AIzaSyAPB2czXhQOikXKJ5EWTN2A7SifWJ06woc",
-        {
-          email: this.email,
-          password: this.pass,
-          returnSecureToken: true,
-
-          // ユーザー情報を含むものはテスト用に一旦削除
-          // fields: {
-          //   email: {
-          //     stringValue: this.email
-          //   },
-          //   pass: {
-          //     stringValue: this.pass
-          //   },
-          //   username: {
-          //     stringValue: this.username
-          //   },
-          // }
-        }
-      )
-      .then(response => {
-        console.log(response);
+      this.$store.dispatch('createUser',{
+        email:this.email,
+        password:this.password,
       });
       this.email = '';
-      this.pass = '';
+      this.password = '';
       this.username = '';
     }
   }

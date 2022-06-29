@@ -1,18 +1,24 @@
 import {createStore} from 'vuex'
 import axios from '../axios-auth';
+import router from '../router';
 
 export const store = createStore({
 
   state:{
-    idToken: null
+    idToken: null,
+    // userName: '',
   },
   getters:{
-    idtoken: state =>  state.idToken
+    idtoken: state =>  state.idToken ,
+    // username: state => state.userName
   },
   mutations: {
     updateIdToken(state,idToken){
       state.idToken = idToken;
-    }
+    },
+    // updateUserName(state,userName){
+    //   state.userName = userName;
+    // }
   },
   actions:{
     login({ commit }, authData){
@@ -26,6 +32,7 @@ export const store = createStore({
       )
         .then(response => {
           commit('updateIdToken',response.data.idToken);
+          router.push('/dashboard');
         });
     },
     createUser({ commit }, authData){
@@ -39,7 +46,12 @@ export const store = createStore({
       )
         .then(response => {
           commit('updateIdToken',response.data.idToken);
+          router.push('/dashboard');
         });
-      }
+      },
+      // ユーザーネーム処理
+      // updateUserName({commit},userName){
+      //   commit('updateUserName',userName);
+      // }
   }
 });

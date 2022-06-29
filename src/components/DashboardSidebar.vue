@@ -182,7 +182,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 $main-font-family: 'Noto Sans JP', sans-serif;
 $off-color: #999999;
-$on-color:#404040;
+$on-color:#565656;
 
 .sidebar_contnair {
   display: flex;

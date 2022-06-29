@@ -53,10 +53,11 @@ header{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 16px 24px 17px 24px;
-  // .header__left{
-
-  // }
+  padding: 0px 24px 0px 24px;
+  height: 68px;
+  .header__left{
+    padding: 15px 0 15px 0px;
+  }
   .header__right{
     display: flex;
     align-items: center;
