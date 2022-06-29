@@ -10,13 +10,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # プロジェクトの依存ライブラリをインストールする
-RUN npm install -g @vue/cli
+RUN npm install
 
 # カレントワーキングディレクトリ(つまり 'app' フォルダ)にプロジェクトのファイルやフォルダをコピーする
 COPY . .
 
 # 本番向けに圧縮しながらアプリケーションをビルドする
-RUN npm run build
+RUN npm run serve
 
 EXPOSE 8080
 CMD [ "http-server", "dist" ]
