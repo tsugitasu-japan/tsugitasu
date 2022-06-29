@@ -1,5 +1,10 @@
 # tsugitasu
 
+## dockerで動かす
+```
+docker-compose up
+```
+
 ## Project setup
 ```
 npm install
