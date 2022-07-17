@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@main  # リポジトリをチェックアウト
 
       - name: Install python and so on
-        run: apt update && apt install -y python2 make g++
+        run: sudo apt update && sudo apt install -y python2 make g++
 
       - name: Install Dependencies
         run: npm install
