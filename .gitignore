@@ -22,3 +22,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# ドッカー関連を無視する
+Dockerfile
+Docker-compose.yml

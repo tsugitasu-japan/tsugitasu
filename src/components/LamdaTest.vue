@@ -13,10 +13,9 @@ export default{
         // LamdaURL
         'https://0dpf7vjoce.execute-api.ap-northeast-1.amazonaws.com/dev/user/entry/tmp',
         {
-          body: {
-            "email": "hoge@example.com",
-            "password": "hogehoge345"
-          }
+          "email": "univ.ad.nu@gmail.com",
+          // "confirmation_code": "430245"
+          "passwor": "hogehoge345"
         }
       );
     }

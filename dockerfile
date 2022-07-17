@@ -17,7 +17,7 @@ WORKDIR /app
 # `package.json` と `package-lock.json` （あれば）を両方コピーする
 # package.jsonはローカルパスでカレントディレクトリにあればいい
 COPY package*.json ./
-RUN pwd
+# RUN pwd
 
 RUN apk update && \
   apk add --no-cache python2 make g++
