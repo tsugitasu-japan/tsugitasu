@@ -7,35 +7,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  print-hello-world:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: execute echo command
-        run: echo "Hello World!"
+      - name: Checkout
+        uses: actions/checkout@main  # リポジトリをチェックアウト
 
-# name: Action Sample
+      - name: Install Dependencies
+        run: npm install
 
-# on:
-#   push:
-#     branches: 
-#       - master
-#   workflow_dispatch:
+      - name: Build
+        run: npm run build
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@main  # リポジトリをチェックアウト
-
-#       - name: Install Dependencies
-#         run: npm install
-
-#       - name: Build
-#         run: npm run build
-
-#       - name: Deploy  # S3にデプロイ
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         run: aws s3 cp --recursive --region ap-northeast-1 dist/ s3://tsugitasu-test
+      - name: Deploy  # S3にデプロイ
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws s3 cp --recursive --region ap-northeast-1 dist/ s3://tsugitasu-test
