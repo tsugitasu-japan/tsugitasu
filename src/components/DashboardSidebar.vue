@@ -2,68 +2,73 @@
   <div class="sidebar_contnair">
     <ul class="ul_layout">
 
-      <div class="link_bg bg_on">
+      <div class="link_bg" :class="{ bg_on: onPageData === 'myClass' }">
         <li class="link_style">
-          <router-link to="/dashboard" class="link_text_d">
+          <router-link to="/dashboard/class" class="link_text_d">
             <div class="link_innner_contnair">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g transform="translate(-8595 3523)">
                   <g transform="translate(8570.87 -3862)">
-                    <path class="svg_on"
+                    <path :class="{ svg_on: onPageData === 'myClass' }"
                       d="M8.015,13.625V2.4A2.125,2.125,0,0,0,5.61,0H2.4A2.125,2.125,0,0,0,0,2.4V13.625a2.125,2.125,0,0,0,2.4,2.4H5.61A2.125,2.125,0,0,0,8.015,13.625Z"
                       transform="translate(35.8 343)" fill="none" stroke="#999" stroke-linecap="round"
                       stroke-width="2.1" />
-                    <path class="svg_on" d="M0,0H4.007" transform="translate(35.8 346.206)" fill="none" stroke="#999"
-                      stroke-linecap="round" stroke-width="2.1" />
-                    <path class="svg_on" d="M0,0H3.206" transform="translate(35.8 355.824)" fill="none" stroke="#999"
-                      stroke-linecap="round" stroke-width="2.1" />
-                    <path class="svg_on" d="M0,0,4.007.04" transform="translate(35.8 352.578)" fill="none" stroke="#999"
-                      stroke-linecap="round" stroke-width="2.1" />
-                    <path class="svg_on" d="M0,0H2.4" transform="translate(35.8 349.412)" fill="none" stroke="#999"
-                      stroke-linecap="round" stroke-width="2.1" />
-                    <path class="svg_on"
+                    <path :class="{ svg_on: onPageData === 'myClass' }" d="M0,0H4.007"
+                      transform="translate(35.8 346.206)" fill="none" stroke="#999" stroke-linecap="round"
+                      stroke-width="2.1" />
+                    <path :class="{ svg_on: onPageData === 'myClass' }" d="M0,0H3.206"
+                      transform="translate(35.8 355.824)" fill="none" stroke="#999" stroke-linecap="round"
+                      stroke-width="2.1" />
+                    <path :class="{ svg_on: onPageData === 'myClass' }" d="M0,0,4.007.04"
+                      transform="translate(35.8 352.578)" fill="none" stroke="#999" stroke-linecap="round"
+                      stroke-width="2.1" />
+                    <path :class="{ svg_on: onPageData === 'myClass' }" d="M0,0H2.4"
+                      transform="translate(35.8 349.412)" fill="none" stroke="#999" stroke-linecap="round"
+                      stroke-width="2.1" />
+                    <path :class="{ svg_on: onPageData === 'myClass' }"
                       d="M2.372,0A2.376,2.376,0,0,0,0,2.364V12.752A2.831,2.831,0,0,0,.337,13.97l.657,1.09a1.473,1.473,0,0,0,2.749,0L4.4,13.97a2.831,2.831,0,0,0,.337-1.218V2.364A2.374,2.374,0,0,0,2.372,0Z"
                       transform="translate(28.53 343)" fill="none" stroke="#999" stroke-linecap="round"
                       stroke-width="2.1" />
-                    <path class="svg_on" d="M4.737,0H0" transform="translate(28.53 347.007)" fill="none" stroke="#999"
-                      stroke-linecap="round" stroke-width="2.1" />
+                    <path :class="{ svg_on: onPageData === 'myClass' }" d="M4.737,0H0"
+                      transform="translate(28.53 347.007)" fill="none" stroke="#999" stroke-linecap="round"
+                      stroke-width="2.1" />
                   </g>
                   <rect width="24" height="24" transform="translate(8595 -3523)" fill="none" />
                 </g>
               </svg>
-              <p class="link_p p_on p_margin">マイ授業</p>
+              <p class="link_p p_off p_margin" :class="{ p_on: onPageData === 'myClass' }">マイ授業</p>
             </div>
           </router-link>
         </li>
       </div>
 
-      <div class="link_bg">
+      <div class="link_bg" :class="{ bg_on: onPageData === 'myGroup' }">
         <li class="link_style">
-          <router-link to="/" class="link_text_d">
+          <router-link to="/dashboard/group" class="link_text_d">
             <div class="link_innner_contnair">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <g transform="translate(-8595 3578)">
                   <g transform="translate(8597.032 -3575.595)">
                     <g transform="translate(12.767 1.666)">
-                      <path d="M2.224,4.3a.5.5,0,0,0-.158,0,2.153,2.153,0,1,1,.158,0Z" fill="none" stroke="#999"
+                      <path :class="{ svg_on: onPageData === 'myGroup' }" d="M2.224,4.3a.5.5,0,0,0-.158,0,2.153,2.153,0,1,1,.158,0Z" fill="none" stroke="#999"
                         stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" />
-                      <path
+                      <path :class="{ svg_on: onPageData === 'myGroup' }"
                         d="M.025,4.114a4.692,4.692,0,0,0,3.281-.6,1.592,1.592,0,0,0,0-2.848A4.722,4.722,0,0,0,0,.075"
                         transform="translate(1.341 6.246)" fill="none" stroke="#999" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2.1" />
                     </g>
                     <g transform="translate(1.668 1.666)">
-                      <path d="M2.074,4.3a.5.5,0,0,1,.158,0,2.153,2.153,0,1,0-.158,0Z" transform="translate(1.23)"
+                      <path :class="{ svg_on: onPageData === 'myGroup' }"  d="M2.074,4.3a.5.5,0,0,1,.158,0,2.153,2.153,0,1,0-.158,0Z" transform="translate(1.23)"
                         fill="none" stroke="#999" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" />
-                      <path
+                      <path :class="{ svg_on: onPageData === 'myGroup' }" 
                         d="M4.162,4.114a4.692,4.692,0,0,1-3.281-.6,1.592,1.592,0,0,1,0-2.848A4.722,4.722,0,0,1,4.187.075"
                         transform="translate(0 6.246)" fill="none" stroke="#999" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2.1" />
                     </g>
                     <g transform="translate(6.689 7.886)">
-                      <path d="M2.224,4.3a.5.5,0,0,0-.158,0,2.153,2.153,0,1,1,.158,0Z" transform="translate(1.081)"
+                      <path :class="{ svg_on: onPageData === 'myGroup' }" d="M2.224,4.3a.5.5,0,0,0-.158,0,2.153,2.153,0,1,1,.158,0Z" transform="translate(1.081)"
                         fill="none" stroke="#999" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" />
-                      <path
+                      <path :class="{ svg_on: onPageData === 'myGroup' }" 
                         d="M.881.662a1.592,1.592,0,0,0,0,2.848,4.728,4.728,0,0,0,4.847,0,1.592,1.592,0,0,0,0-2.848A4.766,4.766,0,0,0,.881.662Z"
                         transform="translate(0 6.258)" fill="none" stroke="#999" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2.1" />
@@ -72,7 +77,7 @@
                   <rect width="24" height="24" transform="translate(8595 -3578)" fill="none" />
                 </g>
               </svg>
-              <p class="link_p p_off p_margin">グループ</p>
+              <p class="link_p p_off p_margin" :class="{ p_on: onPageData === 'myGroup' }">グループ</p>
             </div>
           </router-link>
         </li>
@@ -173,16 +178,25 @@
           </router-link>
         </li>
       </div>
-
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      onPageData:this.$store.state.onPages.onPage
+    }
+  },
+}
+</script>
 
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 $main-font-family: 'Noto Sans JP', sans-serif;
 $off-color: #999999;
-$on-color:#565656;
+$on-color: #565656;
 
 .sidebar_contnair {
   display: flex;
@@ -194,16 +208,16 @@ $on-color:#565656;
 
   .ul_layout {
     margin: 0;
-    padding: 32px 0 0 0;
+    padding: 30px 0 0 0;
 
     .link_bg {
-      width: 196px;
-      height: 44px;
-      margin-bottom: 11px;
-      display: flex;
-      align-items: center;
-      border-radius: 2px;
-      &.bg_on{
+
+
+      &:hover {
+        background-color: #F3F9F9;
+      }
+
+      &.bg_on {
         background-color: #E4F7F7;
       }
 
@@ -211,11 +225,17 @@ $on-color:#565656;
       .link_style {
         list-style: none;
         display: inline-block;
-        margin-left: 15.5px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 11px;
 
         .link_text_d {
+          padding-left: 15px;
+          padding-top: 11px;
+          padding-bottom: 11px;
           text-decoration: none;
-          width: 100%;
+          border-radius: 2px;
+          width: 196px;
 
           .link_innner_contnair {
             display: flex;
@@ -227,14 +247,17 @@ $on-color:#565656;
               font-weight: 700;
               letter-spacing: 0.6px;
             }
-            .svg_on{
+
+            .svg_on {
               stroke: $on-color;
             }
+
             .p_off {
               color: $off-color;
             }
-            .p_on{
-              color:$on-color;
+
+            .p_on {
+              color: $on-color;
             }
 
             .p_margin {

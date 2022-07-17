@@ -1,23 +1,23 @@
 <template>
-<div class="prpfile">
-  <HeaderLogin></HeaderLogin>
-  <div class="content">
-    <MyProfile></MyProfile>
-    <!-- <MyprofileChange></MyprofileChange> -->
+  <div class="prpfile">
+    <LoginedHeader></LoginedHeader>
+    <div class="content">
+      <MyProfile></MyProfile>
+      <!-- <MyprofileChange></MyprofileChange> -->
+    </div>
   </div>
-</div>
 </template>
 
 <script>
-  import HeaderLogin from '../components/HeaderLogin.vue'
-  import MyProfile from '../components/MyProfile.vue'
-  // import MyprofileChange from '../components/MyprofileChange.vue'
+import LoginedHeader from '../components/LoginedHeader.vue'
+import MyProfile from '../components/MyProfile.vue'
+// import MyprofileChange from '../components/MyprofileChange.vue'
 
-  export default{
-    components:{
-      HeaderLogin,
-      MyProfile,
-      // MyprofileChange,
-    }
+export default {
+  components: {
+    LoginedHeader,
+    MyProfile,
+    // MyprofileChange,
   }
+}
 </script>

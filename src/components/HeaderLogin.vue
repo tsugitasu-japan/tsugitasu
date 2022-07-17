@@ -28,7 +28,7 @@
             <img src="../assets/drop_triangle.svg" :class="{relote90:!isShowMenu}">
           </div>
         </div>
-        <div class="profile_changeshow" v-if="isShowMenu">
+        <div class="profile_changeshow" v-show="isShowMenu">
           <routerLink to="/profile" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
           <routerLink to="/" class="prfile_menu_p prfile_menu_link_style">ログアウト</routerLink>
         </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data() {
@@ -53,12 +53,14 @@ export default {
   },
   // DOMのCreated時にユーザー情報を取得
   created() {
-    axios.get(
-      "/users",
-    )
-      .then(response => {
-        console.log(response);
-      });
+    // axios.get(
+    //   "/users",
+    // )
+    //   .then(response => {
+    //     console.log(response);
+    //   });
+    // this.UserName = this.$store.state.signUp.username;
+    this.UserName = 'this.$store.state.signUp.username';
     this.CutName();
   },
   methods: {

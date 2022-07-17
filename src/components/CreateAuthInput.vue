@@ -19,7 +19,7 @@
 
       <div class="auth_contnair_bottom">
         <p class="auth_explain">認証用コードを上記のアドレスに送信しました<br>続けるにはコードを入力してください</p>
-        <button class="submit_button" v-bind:disabled="!isAuthSubmitButtonActive" @click="postAuth">認証</button>
+        <button class="submit_button" v-bind:disabled="!isAuthSubmitButtonActive" @click="postAuthNum">認証</button>
       </div>
     </div>
 
@@ -31,7 +31,7 @@
 export default {
   data() {
     return {
-      email: 'sotakojima@test.com',
+      email: '',
       authError: false,
       // 認証コード
       authNum: '',
@@ -53,42 +53,20 @@ export default {
       // 強制的に再描画しないと、表示と実際の値がずれる
       this.$forceUpdate();
     },
-
-
-
-
-    // 全角数字を入力・貼り付けされたときは半角数字に変換し,数字以外の入力・貼り付けがあったときは文字を除去
-    // filter() {
-    // if (!Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector;
-    //   const filter = function (e) {
-    //     // Event.target	イベントが発生した要素
-    //     let v = e.target.value
-    //       .replace(/[０-９]/g, function (x) { return String.fromCharCode(x.charCodeAt(0) - 0xFEE0) })
-    //       .replace(/[^0-9]/g, '');
-    //     e.target.value = v;
-    //     this.authNum = e.target.value
-    //   };
-
-    //   let isComposing = false; // IE11対応が不要の場合は InputEvent.isComposing が使用できます。
-    //   document.addEventListener('input', function (e) {
-    //     if (!isComposing && e.target.matches("input.auth_number_input")) filter(e)
-    //   });
-
-    // // 変換を伴う全角入力が開始されるとイベント「compositionstart」が発生する
-    // // 変換完了して全角入力が終了するとイベント「compositionend」が発生する
-
-    // document.addEventListener('compositionstart', function (e) {
-    //   if (e.target.matches("input.auth_number_input")) {
-    //     isComposing = true;
-    //   }
-    // });
-    // document.addEventListener('compositionend', function (e) {
-    //   if (e.target.matches("input.auth_number_input")) {
-    //     isComposing = false;
-    //     setTimeout(function () { filter(e) }, 0);
-    //   }
-    // });
-    // }
+    // サーバーに認証コードを送信 Axios
+    postAuthNum() {
+      this.$store.dispatch('postAuthNum', {
+        email: this.email,
+        authNum: this.authNum,
+      })
+      this.authNum = '';
+    },
+    getUserEmail() {
+      this.email = this.$store.state.UserProfileInfo.email;
+    }
+  },
+  created() {
+    this.getUserEmail();
   }
 }
 </script>
@@ -135,7 +113,7 @@ section {
       }
 
       .auth_user_email_margin {
-        margin: 19px 0px 9px 0px;
+        margin: 14px 0px 14px 0px;
       }
 
       .repost_auth_code_button {

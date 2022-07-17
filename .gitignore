@@ -24,4 +24,4 @@ pnpm-debug.log*
 
 # ドッカー関連を無視する
 Dockerfile
-Docker-compose.yml
+docker-compose.yml

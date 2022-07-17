@@ -28,7 +28,6 @@
                   v-for="[colorName] in Array.from(colors)" :key="colorName">
                   <img src="../assets/checked.svg" class="check_icon icon_on" v-show="selectedBgColor === colorName">
                 </div>
-
               </div>
             </div>
             <div class="selected_color" :style="bgSelected"></div>
@@ -45,82 +44,17 @@
               </div>
               <!-- アイコン設定 アコーディオンパネル内部 -->
               <div class="mark_selecter_changeshow mark_selecter_grid_layout" v-show="isShowMarkSelecter">
-                <div class="icon_select_button icon_select_button_contnair" @click="setMeetingIcon">
-                  <img src="../assets/icon-off-fill/meeting-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setJapaneseIcon">
-                  <img src="../assets/icon-off-fill/japanese-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setEnglishIcon">
-                  <img src="../assets/icon-off-fill/english-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setMathIcon">
-                  <img src="../assets/icon-off-fill/math-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setBiologyIcon">
-                  <img src="../assets/icon-off-fill/biology-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setChemistryIcon">
-                  <img src="../assets/icon-off-fill/chemistry-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setPhysicsIcon">
-                  <img src="../assets/icon-off-fill/physics-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setGeographyIcon">
-                  <img src="../assets/icon-off-fill/geography-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setHistoryIcon">
-                  <img src="../assets/icon-off-fill/history-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setMachineIcon">
-                  <img src="../assets/icon-off-fill/machine-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setMusicIcon">
-                  <img src="../assets/icon-off-fill/music-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setArtIcon">
-                  <img src="../assets/icon-off-fill/art-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setScissorsIcon">
-                  <img src="../assets/icon-off-fill/scissors-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setSoccerIcon">
-                  <img src="../assets/icon-off-fill/soccer-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setHeartIcon">
-                  <img src="../assets/icon-off-fill/heart-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setPcIcon">
-                  <img src="../assets/icon-off-fill/pc-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setHouseIcon">
-                  <img src="../assets/icon-off-fill/house-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setSmileIcon">
-                  <img src="../assets/icon-off-fill/smile-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setPersonIcon">
-                  <img src="../assets/icon-off-fill/person-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setLightIcon">
-                  <img src="../assets/icon-off-fill/light-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setAwardIcon">
-                  <img src="../assets/icon-off-fill/award-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setMasterIcon">
-                  <img src="../assets/icon-off-fill/master-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setSerchIcon">
-                  <img src="../assets/icon-off-fill/serch-off.svg">
-                </div>
-                <div class="icon_select_button icon_select_button_contnair" @click="setTestIcon">
-                  <img src="../assets/icon-off-fill/test-off.svg">
+                <div class="icon_select_button icon_select_button_contnair" @click="selectMark(mark)"
+                  v-for="mark in marks" :key="mark">
+                  <img :src="mark.iconOffLink" class="icon">
+                  <span class="icon_selected_contnair" :style="bgSelected"
+                    v-show="iconOffSrc === mark.iconOffLink"></span>
+                  <span class="icon_selecting_contnair" :style="bgSelected"></span>
                 </div>
               </div>
             </div>
             <div class="selected_mark">
-              <img :src="markSrc" class="selected_mark_layout">
+              <img :src="iconOffSrc" class="selected_mark_layout">
             </div>
           </div>
         </div>
@@ -136,7 +70,9 @@
       </div>
       <!-- セッティング詳細 -->
       <div class="classname_setting_inner" v-show="isClassNameSettingOpen">
-        <input class="classname_input" type="text" placeholder="授業名を記入してください">
+        <input class="classname_input" type="text" placeholder="授業名を記入してください（20文字以内）" v-model.trim="className" maxlength="20"
+          :class="{ caution_on: shouldSetCaution }">
+        <p class="classname_caution" v-show="shouldSetCaution">※ 授業名は必須項目です</p>
       </div>
     </section>
 
@@ -148,7 +84,8 @@
       </div>
       <!-- セッティング詳細 -->
       <div class="classoverview_setting_inner" v-show="isClassOverviewSettingOpen">
-        <textarea class="classoverview_textarea" type="text" placeholder="授業の概要を簡単に記入してください"></textarea>
+        <textarea class="classoverview_textarea" type="text" placeholder="授業の概要を簡単に記入してください"
+          v-model="classExp"></textarea>
       </div>
     </section>
 
@@ -191,32 +128,32 @@
       <!-- セッティング詳細 -->
       <div class="classrelease_setting_inner" v-show="isClassReleaseSettingOpen">
         <div class="release_setting_radio_button_area">
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting(0)">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 0 }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('public')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'public' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 0 }">パブリック</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'public' }">パブリック</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting(1)">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 1 }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('private')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'private' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 1 }">プライベート</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'private' }">プライベート</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting(2)">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 2 }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('allowed')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'allowed' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 2 }">許可した人のみ</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'allowed' }">許可した人のみ</p>
           </div>
         </div>
         <div class="release_selected_explain_area">
-          <p class="release_selected_explain" v-show="selectedRelease === 0">誰でもあなたの授業を閲覧し、参考にすることができます</p>
-          <p class="release_selected_explain" v-show="selectedRelease === 1">あなたのみが閲覧・編集できます</p>
-          <p class="release_selected_explain" v-show="selectedRelease === 2">あなたの許可した人物のみが閲覧できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'public'">誰でもあなたの授業を閲覧し、参考にすることができます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'private'">あなたのみが閲覧・編集できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'allowed'">あなたの許可した人物のみが閲覧できます</p>
         </div>
       </div>
     </section>
 
     <!-- 作成ボタン -->
-    <button class="submit_button" @click="login">以上の内容で作成</button>
+    <button class="submit_button" @click="createClass" v-bind:disabled="isSubmitButtonActive">以上の内容で作成</button>
   </div>
 </template>
 
@@ -229,21 +166,144 @@ export default {
       ["red", "#F06A6A"],
       ["peach", "#EC8D71"],
       ["orange", "#F1BD6C"],
-      ["rightgreen", "#70CA70"],
+      ["lightgreen", "#70CA70"],
       ["green", "#309E30"],
-      ["rightblue", "#9EE7E3"],
+      ["lightblue", "#9EE7E3"],
       ["blue", "#4573D2"],
       ["cepia", "#13CCCE"],
       ["purple", "#B36BD4"],
-      ["rightpink", "#F9AAEF"],
+      ["lightpink", "#F9AAEF"],
       ["pink", "#F26FB2"],
       ["blood", "#AA5D5D"],
       ["grey", "#C7C4C4"],
-      ["rightblack", "#6D6E6F"],
+      ["lightblack", "#6D6E6F"],
     ]);
 
+    const marks = [
+      {
+        iconName: "meeting",
+        iconLink: require('@/assets/class-icon-on/meeting.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/meeting-off.svg')
+      },
+      {
+        iconName: "japanese",
+        iconLink: require('@/assets/class-icon-on/japanese.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/japanese-off.svg')
+      },
+      {
+        iconName: "english",
+        iconLink: require('@/assets/class-icon-on/english.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/english-off.svg')
+      },
+      {
+        iconName: "math",
+        iconLink: require('@/assets/class-icon-on/math.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/math-off.svg')
+      },
+      {
+        iconName: "chemistry",
+        iconLink: require('@/assets/class-icon-on/chemistry.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/chemistry-off.svg')
+      },
+      {
+        iconName: "biology",
+        iconLink: require('@/assets/class-icon-on/biology.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/biology-off.svg')
+      },
+      {
+        iconName: "physics",
+        iconLink: require('@/assets/class-icon-on/physics.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/physics-off.svg')
+      },
+      {
+        iconName: "geography",
+        iconLink: require('@/assets/class-icon-on/geography.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/geography-off.svg')
+      },
+      {
+        iconName: "history",
+        iconLink: require('@/assets/class-icon-on/history.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/history-off.svg')
+      },
+      {
+        iconName: "machine",
+        iconLink: require('@/assets/class-icon-on/machine.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/machine-off.svg')
+      },
+      {
+        iconName: "music",
+        iconLink: require('@/assets/class-icon-on/music.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/music-off.svg')
+      },
+      {
+        iconName: "art",
+        iconLink: require('@/assets/class-icon-on/art.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/art-off.svg')
+      },
+      {
+        iconName: "scissors",
+        iconLink: require('@/assets/class-icon-on/scissors.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/scissors-off.svg')
+      },
+      {
+        iconName: "soccer",
+        iconLink: require('@/assets/class-icon-on/soccer.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/soccer-off.svg')
+      },
+      {
+        iconName: "heart",
+        iconLink: require('@/assets/class-icon-on/heart.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/heart-off.svg')
+      },
+      {
+        iconName: "pc",
+        iconLink: require('@/assets/class-icon-on/pc.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/pc-off.svg')
+      },
+      {
+        iconName: "house",
+        iconLink: require('@/assets/class-icon-on/house.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/house-off.svg')
+      },
+      {
+        iconName: "smile",
+        iconLink: require('@/assets/class-icon-on/smile.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/smile-off.svg')
+      },
+      {
+        iconName: "person",
+        iconLink: require('@/assets/class-icon-on/person.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/person-off.svg')
+      },
+      {
+        iconName: "light",
+        iconLink: require('@/assets/class-icon-on/light.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/light-off.svg')
+      },
+      {
+        iconName: "award",
+        iconLink: require('@/assets/class-icon-on/award.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/award-off.svg')
+      },
+      {
+        iconName: "master",
+        iconLink: require('@/assets/class-icon-on/master.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/master-off.svg')
+      },
+      {
+        iconName: "search",
+        iconLink: require('@/assets/class-icon-on/search.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/search-off.svg')
+      },
+      {
+        iconName: "test",
+        iconLink: require('@/assets/class-icon-on/test.svg'),
+        iconOffLink: require('@/assets/icon-off-fill/test-off.svg')
+      },
+    ];
     return {
       colors,
+      marks,
       isIconSettingOpen: true,
       isShowBgSelecter: false,
       isShowMarkSelecter: false,
@@ -252,17 +312,36 @@ export default {
       isClassTagSettingOpen: true,
       isClassReleaseSettingOpen: true,
       settedTagEmpty: true,
-      iconSrc: require('@/assets/class-icon-on/meeting.svg'),
-      markSrc: require('@/assets/icon-off-fill/meeting-off.svg'),
-      selectedBgColor: "yellow",
       tag_inputed: '',
-      hash_tag_inputed: '',
+      // 授業作成情報
+      className: '',
+      classExp: '',
+      iconSrc: require('@/assets/class-icon-on/meeting.svg'),
+      iconOffSrc: require('@/assets/icon-off-fill/meeting-off.svg'),
+      selectedBgColor: 'yellow',
       classTags: [],
-      selectedRelease: 0,
+      selectedRelease: 'public',
+
+      // 作成した授業の連想配列、送信時に要素を追加
+      createClassInfo: []
     }
   },
   computed: {
     bgSelected() { return { backgroundColor: this.colors.get(this.selectedBgColor) }; },
+    shouldSetCaution() {
+      if (this.className === '') {
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+    isSubmitButtonActive(){
+      if(this.shouldSetCaution === true)
+      return true
+      return false
+
+    }
   },
   // タグ配列を監視して空かどうかで表示文の有無を変更
   watch: {
@@ -305,103 +384,10 @@ export default {
     selectBgColor(color) {
       this.selectedBgColor = color;
     },
-
     //アイコン変更メソッド
-    setMeetingIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/meeting.svg');
-      this.markSrc = require('@/assets/icon-off-fill/meeting-off.svg');
-    },
-    setJapaneseIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/japanese.svg');
-      this.markSrc = require('@/assets/icon-off-fill/japanese-off.svg');
-    },
-    setEnglishIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/english.svg');
-      this.markSrc = require('@/assets/icon-off-fill/english-off.svg');
-    },
-    setMathIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/math.svg');
-      this.markSrc = require('@/assets/icon-off-fill/math-off.svg');
-    },
-    setBiologyIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/biology.svg');
-      this.markSrc = require('@/assets/icon-off-fill/biology-off.svg');
-    },
-    setChemistryIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/chemistry.svg');
-      this.markSrc = require('@/assets/icon-off-fill/chemistry-off.svg');
-    },
-    setPhysicsIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/physics.svg');
-      this.markSrc = require('@/assets/icon-off-fill/physics-off.svg');
-    },
-    setGeographyIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/geography.svg');
-      this.markSrc = require('@/assets/icon-off-fill/geography-off.svg');
-    },
-    setHistoryIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/history.svg');
-      this.markSrc = require('@/assets/icon-off-fill/history-off.svg');
-    },
-    setMachineIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/machine.svg');
-      this.markSrc = require('@/assets/icon-off-fill/machine-off.svg');
-    },
-    setMusicIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/music.svg');
-      this.markSrc = require('@/assets/icon-off-fill/music-off.svg');
-    },
-    setArtIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/art.svg');
-      this.markSrc = require('@/assets/icon-off-fill/art-off.svg');
-    },
-    setScissorsIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/scissors.svg');
-      this.markSrc = require('@/assets/icon-off-fill/scissors-off.svg');
-    },
-    setSoccerIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/soccer.svg');
-      this.markSrc = require('@/assets/icon-off-fill/soccer-off.svg');
-    },
-    setHeartIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/heart.svg');
-      this.markSrc = require('@/assets/icon-off-fill/heart-off.svg');
-    },
-    setPcIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/pc.svg');
-      this.markSrc = require('@/assets/icon-off-fill/pc-off.svg');
-    },
-    setHouseIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/house.svg');
-      this.markSrc = require('@/assets/icon-off-fill/house-off.svg');
-    },
-    setSmileIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/smile.svg');
-      this.markSrc = require('@/assets/icon-off-fill/smile-off.svg');
-    },
-    setPersonIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/person.svg');
-      this.markSrc = require('@/assets/icon-off-fill/person-off.svg');
-    },
-    setLightIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/light.svg');
-      this.markSrc = require('@/assets/icon-off-fill/light-off.svg');
-    },
-    setAwardIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/award.svg');
-      this.markSrc = require('@/assets/icon-off-fill/award-off.svg');
-    },
-    setMasterIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/master.svg');
-      this.markSrc = require('@/assets/icon-off-fill/master-off.svg');
-    },
-    setSerchIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/search.svg');
-      this.markSrc = require('@/assets/icon-off-fill/serch-off.svg');
-    },
-    setTestIcon() {
-      this.iconSrc = require('@/assets/class-icon-on/test.svg');
-      this.markSrc = require('@/assets/icon-off-fill/test-off.svg');
+    selectMark(mark) {
+      this.iconSrc = mark.iconLink;
+      this.iconOffSrc = mark.iconOffLink;
     },
 
     // 配列にタグを追加メソッド(空かつ同文字が配列に含まれないでバリデーション)
@@ -419,6 +405,22 @@ export default {
     SelectReleaseSetting(release) {
       this.selectedRelease = release;
     },
+
+    // 作成授業情報を送信 ‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-----------------------------------
+    createClass() {
+
+      // Vuexを更新
+      this.$store.dispatch('createClass', {
+        className: this.className,
+        classExp: this.classExp,
+        iconSrc: this.iconSrc,
+        iconOffSrc: this.iconOffSrc,
+        selectedBgColor: this.selectedBgColor,
+        classTags: this.classTags,
+        selectedRelease: this.selectedRelease,
+      });
+      console.log('push')
+    }
   },
 }
 
@@ -438,17 +440,17 @@ $yellow: #F8DF72;
 $red: #F06A6A;
 $peach: #EC8D71;
 $orange: #F1BD6C;
-$rightgreen: #70CA70;
+$lightgreen: #70CA70;
 $green: #309E30;
 $blue: #4573D2;
-$rightblue: #9EE7E3;
+$lightblue: #9EE7E3;
 $cepia: #13CCCE;
 $purple: #B36BD4;
-$rightpink: #F9AAEF;
+$lightpink: #F9AAEF;
 $pink: #F26FB2;
 $blood: #AA5D5D;
 $grey: #C7C4C4;
-$rightblack: #6D6E6F;
+$lightblack: #6D6E6F;
 // $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
 $main-font-family: 'Noto Sans JP', sans-serif;
 
@@ -515,7 +517,6 @@ $main-font-family: 'Noto Sans JP', sans-serif;
         .icon_contnair {
           width: 98px;
           height: 98px;
-          // background-color: $yellow;
           border-radius: 22.4%;
           position: relative;
 
@@ -625,16 +626,16 @@ $main-font-family: 'Noto Sans JP', sans-serif;
                   background-color: $orange;
                 }
 
-                &.rightgreen {
-                  background-color: $rightgreen;
+                &.lightgreen {
+                  background-color: $lightgreen;
                 }
 
                 &.green {
                   background-color: $green;
                 }
 
-                &.rightblue {
-                  background-color: $rightblue;
+                &.lightblue {
+                  background-color: $lightblue;
                 }
 
                 &.blue {
@@ -649,8 +650,8 @@ $main-font-family: 'Noto Sans JP', sans-serif;
                   background-color: $purple;
                 }
 
-                &.rightpink {
-                  background-color: $rightpink;
+                &.lightpink {
+                  background-color: $lightpink;
                 }
 
                 &.pink {
@@ -665,8 +666,8 @@ $main-font-family: 'Noto Sans JP', sans-serif;
                   background-color: $grey;
                 }
 
-                &.rightblack {
-                  background-color: $rightblack;
+                &.lightblack {
+                  background-color: $lightblack;
                 }
 
                 .check_icon {
@@ -687,19 +688,21 @@ $main-font-family: 'Noto Sans JP', sans-serif;
 
             // アイコン変更アコーディオンパネル内部
             .mark_selecter_changeshow {
-              padding: 8px 11px 14px 11px;
+              padding: 10px 12px 14px 12px;
 
               &.mark_selecter_grid_layout {
                 display: grid;
                 grid-template-columns: auto auto auto;
                 justify-content: space-between;
-                grid-row-gap: 20px;
-                grid-column-gap: 17px;
+                grid-row-gap: 22px;
+                grid-column-gap: 20px;
                 overflow-y: scroll;
                 height: 232px;
-                &::-webkit-scrollbar{
+
+                &::-webkit-scrollbar {
                   width: 5px;
                 }
+
                 &::-webkit-scrollbar-thumb {
                   background-color: #c5c5c5;
                   border-radius: 100px;
@@ -708,271 +711,325 @@ $main-font-family: 'Noto Sans JP', sans-serif;
 
               .icon_select_button {
                 cursor: pointer;
+                position: relative;
+
+                &:hover .icon_selecting_contnair {
+                  opacity: .3;
+                }
+
+                .icon_selecting_contnair {
+                  position: absolute;
+                  width: 150%;
+                  height: 150%;
+                  border-radius: 22%;
+                  z-index: -100;
+                  top: 50%;
+                  left: 50%;
+                  opacity: 0;
+                  transform: translate(-50%, -50%);
+                  -webkit-transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  transition: .1s ease;
+                }
+
+                .icon_selected_contnair {
+                  position: absolute;
+                  width: 150%;
+                  height: 150%;
+                  border-radius: 22%;
+                  z-index: -99;
+                  top: 50%;
+                  left: 50%;
+                  opacity: 1;
+                  transform: translate(-50%, -50%);
+                  -webkit-transform: translate(-50%, -50%);
+                  -ms-transform: translate(-50%, -50%);
+                  transition: .1s ease;
+                }
+
+                .contnair_selected {
+                  opacity: .55;
+                }
               }
             }
           }
+        }
 
-          .selected_color {
+        .selected_color {
+          width: 44px;
+          height: 44px;
+          border-radius: 1px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 0;
+        }
+
+        .selected_mark {
+          width: 44px;
+          height: 44px;
+          border-radius: 1px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 0;
+
+          .selected_mark_layout {
             width: 44px;
-            height: 44px;
-            border-radius: 1px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 0;
-          }
-
-          .selected_mark {
-            width: 44px;
-            height: 44px;
-            border-radius: 1px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 0;
-
-            .selected_mark_layout {
-              width: 44px;
-            }
           }
         }
       }
     }
   }
+}
 
-  // 授業名設定アコーディオンパネル内部
-  .classname_setting_inner {
-    margin-top: 40px;
+// 授業名設定アコーディオンパネル内部
+.classname_setting_inner {
+  margin-top: 40px;
 
-    .classname_input {
+  .classname_input {
+    font-family: $main-font-family;
+    font-size: 15px;
+    font-weight: 400;
+    color: $black;
+    letter-spacing: 0.5px;
+    width: 570px;
+    height: 56px;
+    border: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    border: solid 1px #E6E6E6;
+    border-radius: 4px;
+
+    &::placeholder {
       font-family: $main-font-family;
-      font-size: 15px;
-      font-weight: 400;
-      color: $black;
-      letter-spacing: 0.5px;
-      width: 570px;
-      height: 56px;
-      border: none;
-      padding-left: 10px;
-      padding-right: 10px;
-      vertical-align: top;
-      background-color: #FFFFFF;
-      border: solid 1px #E6E6E6;
-      border-radius: 4px;
+      color: #bcbcbc;
+      font-weight: 300;
+    }
 
-      &::placeholder {
-        font-family: $main-font-family;
-        color: #bcbcbc;
-        font-weight: 300;
-      }
+    &:focus {
+      border: solid 1px #999999;
+      background: transparent;
+      outline: transparent;
+    }
 
-      &:focus {
-        border: solid 1px #999999;
-        background: transparent;
-        outline: transparent;
-      }
+
+  }
+
+  .classname_caution {
+    padding-top: 10px;
+    font-family: $main-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: #FE0F33;
+  }
+}
+
+// 授業概要アコーディオンパネル内部
+.classoverview_setting_inner {
+  margin-top: 40px;
+
+  .classoverview_textarea {
+    font-family: $main-font-family;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: $black;
+    letter-spacing: 0.5px;
+    width: 570px;
+    height: 150px;
+    border: none;
+    padding: 10px 10px 10px 10px;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    border: solid 1px #E6E6E6;
+    border-radius: 4px;
+
+    &::placeholder {
+      font-family: $main-font-family;
+      color: #bcbcbc;
+      font-weight: 300;
+    }
+
+    &:focus {
+      border: solid 1px #999999;
+      background: transparent;
+      outline: transparent;
+    }
+  }
+}
+
+// 授業タグアコーディオンパネル内部
+.classtag_setting_inner {
+  margin-top: 40px;
+
+  .classtag_input {
+    font-family: $main-font-family;
+    font-size: 15px;
+    font-weight: 400;
+    color: $black;
+    letter-spacing: 0.5px;
+    width: 570px;
+    height: 56px;
+    border: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    border: solid 1px #E6E6E6;
+    border-radius: 4px;
+
+    &::placeholder {
+      font-family: $main-font-family;
+      color: #bcbcbc;
+      font-weight: 300;
+    }
+
+    &:focus {
+      border: solid 1px #999999;
+      background: transparent;
+      outline: transparent;
     }
   }
 
-  // 授業概要アコーディオンパネル内部
-  .classoverview_setting_inner {
-    margin-top: 40px;
-
-    .classoverview_textarea {
-      font-family: $main-font-family;
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 1.55;
-      color: $black;
-      letter-spacing: 0.5px;
-      width: 570px;
-      height: 150px;
-      border: none;
-      padding: 10px 10px 10px 10px;
-      vertical-align: top;
-      background-color: #FFFFFF;
-      border: solid 1px #E6E6E6;
-      border-radius: 4px;
-
-      &::placeholder {
-        font-family: $main-font-family;
-        color: #bcbcbc;
-        font-weight: 300;
-      }
-
-      &:focus {
-        border: solid 1px #999999;
-        background: transparent;
-        outline: transparent;
-      }
-    }
+  .classtag_input_margin {
+    margin-bottom: 30px;
   }
 
-  // 授業タグアコーディオンパネル内部
-  .classtag_setting_inner {
-    margin-top: 40px;
+  .setted_tag_area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 15px;
 
-    .classtag_input {
-      font-family: $main-font-family;
-      font-size: 15px;
-      font-weight: 400;
-      color: $black;
-      letter-spacing: 0.5px;
-      width: 570px;
-      height: 56px;
-      border: none;
-      padding-left: 10px;
-      padding-right: 10px;
-      vertical-align: top;
-      background-color: #FFFFFF;
-      border: solid 1px #E6E6E6;
-      border-radius: 4px;
-
-      &::placeholder {
-        font-family: $main-font-family;
-        color: #bcbcbc;
-        font-weight: 300;
-      }
-
-      &:focus {
-        border: solid 1px #999999;
-        background: transparent;
-        outline: transparent;
-      }
-    }
-
-    .classtag_input_margin {
-      margin-bottom: 30px;
-    }
-
-    .setted_tag_area {
+    .setted_tag {
+      border: 1px solid #D8D8D8;
+      border-radius: 2px;
+      padding: 0px 3px 0px 13px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px 15px;
+      flex-direction: row;
+      align-items: center;
 
-      .setted_tag {
-        border: 1px solid #D8D8D8;
-        border-radius: 2px;
-        padding: 0px 3px 0px 13px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .setted_tag_p {
-          font-family: $main-font-family;
-          font-size: 15px;
-          font-weight: 400;
-          letter-spacing: 0.5px;
-          color: $black;
-          margin-right: 5px;
-        }
-
-        .setted_tag_delete_button {
-          height: 37px;
-          width: 37px;
-          position: relative;
-          cursor: pointer;
-
-          .setted_tag_delete_button_icon {
-            position: absolute;
-            top: 1px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-          }
-        }
-      }
-    }
-
-    .tag_explain {
-      font-family: $main-font-family;
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: 0.5px;
-      color: #13CCCE;
-    }
-  }
-
-  .classrelease_setting_inner {
-    margin-top: 40px;
-
-    .release_setting_radio_button_area {
-      display: flex;
-      gap: 0px 45px;
-      margin-bottom: 25px;
-
-      .release_setting_radio_button {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        .circle {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          border: 2px solid #E6E6E6;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          &.circle_margin {
-            margin-right: 10px;
-          }
-
-          &.circle_on {
-            background-color: $main-color;
-          }
-        }
-
-        .radio_button_label {
-          font-family: $main-font-family;
-          font-size: 15px;
-          font-weight: 400;
-          letter-spacing: 0.6px;
-          color: #bcbcbc;
-          padding-bottom: 2px;
-        }
-
-        .radio_button_label_on {
-          color: $main-color;
-        }
-      }
-    }
-
-    .release_selected_explain_area {
-      .release_selected_explain {
+      .setted_tag_p {
         font-family: $main-font-family;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 400;
         letter-spacing: 0.5px;
+        color: $black;
+        margin-right: 5px;
+      }
+
+      .setted_tag_delete_button {
+        height: 37px;
+        width: 37px;
+        position: relative;
+        cursor: pointer;
+
+        &:hover .setted_tag_delete_button_icon line {
+          stroke: $black;
+        }
+
+        .setted_tag_delete_button_icon {
+          position: absolute;
+          top: 1px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          margin: auto;
+        }
+      }
+    }
+  }
+
+  .tag_explain {
+    font-family: $main-font-family;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: #13CCCE;
+  }
+}
+
+.classrelease_setting_inner {
+  margin-top: 40px;
+
+  .release_setting_radio_button_area {
+    display: flex;
+    gap: 0px 45px;
+    margin-bottom: 25px;
+
+    .release_setting_radio_button {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .circle {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 2px solid #E6E6E6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.circle_margin {
+          margin-right: 10px;
+        }
+
+        &.circle_on {
+          background-color: $main-color;
+        }
+      }
+
+      .radio_button_label {
+        font-family: $main-font-family;
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 0.6px;
+        color: #bcbcbc;
+        padding-bottom: 2px;
+      }
+
+      .radio_button_label_on {
         color: $main-color;
       }
     }
   }
 
-  .submit_button {
-    text-decoration: none;
-    display: block;
-    border-radius: 5px;
-    background-color: #ebebeb;
-    transition: 0.1s ease;
-    border: transparent;
-    font-family: $main-font-family;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    color: #FFFFFF;
-    width: 248px;
-    height: 44px;
-    margin: 40px 0px 60px 0px;
+  .release_selected_explain_area {
+    .release_selected_explain {
+      font-family: $main-font-family;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      color: $main-color;
+    }
+  }
+}
 
-    &:valid {
-      background-color: $main-color;
+.submit_button {
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+  background-color: #ebebeb;
+  transition: 0.1s ease;
+  border: transparent;
+  font-family: $main-font-family;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #FFFFFF;
+  width: 248px;
+  height: 44px;
+  margin: 40px 0px 60px 0px;
 
-      &:hover {
-        background-color: $main-hover;
-      }
+  &:valid {
+    background-color: $main-color;
+
+    &:hover {
+      background-color: $main-hover;
     }
   }
 }

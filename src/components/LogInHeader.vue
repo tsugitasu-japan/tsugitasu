@@ -6,19 +6,15 @@
     <div class="signup__header__right">
       <div class="link_login_button"><router-link class="link_login" to="/signup"><div class="link_login_text">会員登録はこちらから</div></router-link></div>
     </div>
-
   </header>
-
 </template>
 
 <style  scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-// @import url("yakuhanjp/dist/scss/yakuhanjp_s");
 $main-color:#13CCCE;
 $main-hover:#26ABAD;
 $black:#2B2B2B;
-// $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
 $main-font-family:'Noto Sans JP', sans-serif;
 
 header{

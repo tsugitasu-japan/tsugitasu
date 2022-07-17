@@ -57,11 +57,7 @@
                 プライバシーポリシー</router-link> を必ずご確認ください
             </p>
           </div>
-          <button class="submit_button" v-bind:disabled="!isSubmitButtonActive" @click="createUser">規約に同意して登録</button>
-
-          <div>
-
-          </div>
+          <button class="submit_button" v-bind:disabled="!isSubmitButtonActive" @click="signUpUser">規約に同意して登録</button>
         </div>
       </div>
     </div>
@@ -129,17 +125,17 @@ export default {
       }
     },
     // サーバーに作成ユーザー情報を送信 Axios
-    createUser() {
-      this.$store.dispatch('createUser',{
-        email:this.email,
-        password:this.password,
+    signUpUser() {
+      this.$store.dispatch('signUpUser', {
+        email: this.email,
+        password: this.password,
+        username: this.username
       });
+      this.username = '';
       this.email = '';
       this.password = '';
-      this.username = '';
-    }
-  }
-
+    },
+  },
 }
 </script>
 

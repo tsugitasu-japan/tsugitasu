@@ -4,16 +4,18 @@
       <div class="self_introduce_contnair_left">
         <div class="img_area">
           <!-- 本当はユーザーのアイコンを設置 -->
-          <div class="test_circle"></div>
+          <div class="user_icon" :style="{ 'background-image': 'url(' + iconUrl + ')' }"></div>
         </div>
         <div class="text_area">
           <p class="profile_username_style username_padding">{{ username }}</p>
           <p class="profile_selfintro_style profile_selfintro_contnair">{{ selfIntroduction }}</p>
           <div class="follow_info_area">
-            <router-link to="/profile/following" class="follow_info_style follow_info_margin_r"><span class="follow_num_style">{{ followNum }}</span> フォロー</router-link>
-            <router-link to="/profile/followers" class="follow_info_style"><span class="follow_num_style">{{ followerNum }}</span> フォロワー</router-link>
+            <router-link to="/profile/following" class="follow_info_style follow_info_margin_r"><span
+                class="follow_num_style">{{ followNum }}</span> フォロー</router-link>
+            <router-link to="/profile/followers" class="follow_info_style"><span class="follow_num_style">{{ followerNum
+            }}</span> フォロワー</router-link>
           </div>
-       </div>
+        </div>
       </div>
       <div class="button_area">
         <div class="edit_button">
@@ -30,11 +32,22 @@
 export default {
   data() {
     return {
-      username: '小島聡太テスト',
-      selfIntroduction: '愛知県名古屋市で数学教員をしています。 数学の問題と解答をブラッシュアップの目的も兼ねて、時々投稿しています。 愛知県名古屋市で数学教員をしています。 数学の問題と解答をブラッシュアップの目的も兼ねて、時々投稿しています。',
+      iconUrl: '',
+      username: '',
+      selfIntroduction: '',
       followNum: '3',
       followerNum: '3',
     }
+  },
+  methods: {
+    getUserProfile() {
+      this.username = this.$store.state.UserProfileInfo.username;
+      this.selfIntroduction = this.$store.state.UserProfileInfo.selfIntroduction;
+      this.iconUrl = this.$store.state.UserProfileInfo.iconUrl;
+    }
+  },
+  created() {
+    this.getUserProfile()
   }
 }
 
@@ -56,74 +69,81 @@ $main-font-family: 'Noto Sans JP', sans-serif;
   justify-content: center;
 
   .self_introduce_contnair {
-    width: 730px;
+    width: 740px;
     display: flex;
     justify-content: space-between;
     padding-bottom: 42px;
     border-bottom: 1px solid #E6E6E6;
-    .self_introduce_contnair_left{
+
+    .self_introduce_contnair_left {
       display: flex;
-    .img_area {
-      margin-right: 32px;
-      .test_circle {
-        width: 104px;
-        height: 104px;
-        border-radius: 57px;
-        background-color: #2B2B2B;
-      }
-    }
 
-    .text_area {
-      .profile_username_style {
-        font-family: $main-font-family;
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: 0.8px;
-        color: $black;
+      .img_area {
+        margin-right: 32px;
+
+        .user_icon {
+          width: 104px;
+          height: 104px;
+          border-radius: 57px;
+          background-size: cover;
+        }
       }
 
-      .username_padding {
-        padding-bottom: 10px;
-      }
+      .text_area {
+        .profile_username_style {
+          font-family: $main-font-family;
+          font-size: 21px;
+          font-weight: 700;
+          letter-spacing: 0.9px;
+          color: $black;
+        }
 
-      .profile_selfintro_style {
-        font-family: $main-font-family;
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: 0.4px;
-        line-height: 1.94;
-        color: $black;
-      }
+        .username_padding {
+          padding-bottom: 13px;
+        }
 
-      .profile_selfintro_contnair {
-        max-width: 500px;
-      }
-
-      .follow_info_area {
-        display: flex;
-        padding-top: 11px;
-
-        .follow_info_style {
+        .profile_selfintro_style {
           font-family: $main-font-family;
           font-size: 14px;
           font-weight: 400;
           letter-spacing: 0.4px;
-          color: #7F7F7F;
-          text-decoration: none;
-          .follow_num_style{
-          font-family: $main-font-family;
-          font-size: 15px;
-          font-weight: 700;
+          line-height: 1.9;
           color: $black;
+        }
+
+        .profile_selfintro_contnair {
+          width: 500px;
+          white-space: pre-wrap;
+        }
+
+        .follow_info_area {
+          display: flex;
+          padding-top: 14px;
+
+          .follow_info_style {
+            font-family: $main-font-family;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.4px;
+            color: #7F7F7F;
+            text-decoration: none;
+
+            .follow_num_style {
+              font-family: $main-font-family;
+              font-size: 15px;
+              font-weight: 700;
+              color: $black;
+            }
+          }
+
+          .follow_info_margin_r {
+            margin-right: 12px;
           }
         }
-        .follow_info_margin_r{
-          margin-right: 12px;
-        }
       }
-    }
 
     }
+
     .button_area {
       .edit_button {
         .link_edit_button {

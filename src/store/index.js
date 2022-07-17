@@ -1,57 +1,25 @@
 import {createStore} from 'vuex'
-import axios from '../axios-auth';
-import router from '../router';
+// vuexモジュールのインポート
+import UserProfileInfo from './modules/UserProfileInfo'
+import UserCreatedClasses from './modules/UserCreatedClasses'
+import onPages from './modules/onPages'
 
 export const store = createStore({
+  state: {
 
-  state:{
-    idToken: null,
-    // userName: '',
   },
-  getters:{
-    idtoken: state =>  state.idToken ,
-    // username: state => state.userName
-  },
+  getters: [
+
+  ],
   mutations: {
-    updateIdToken(state,idToken){
-      state.idToken = idToken;
-    },
-    // updateUserName(state,userName){
-    //   state.userName = userName;
-    // }
+
   },
-  actions:{
-    login({ commit }, authData){
-      axios.post(
-        "/accounts:signInWithPassword?key=AIzaSyAPB2czXhQOikXKJ5EWTN2A7SifWJ06woc",
-        {
-          email: authData.email,
-          password: authData.password,
-          returnSecureToken: true,
-        }
-      )
-        .then(response => {
-          commit('updateIdToken',response.data.idToken);
-          router.push('/dashboard');
-        });
-    },
-    createUser({ commit }, authData){
-      axios.post(
-        "/accounts:signUp?key=AIzaSyAPB2czXhQOikXKJ5EWTN2A7SifWJ06woc",
-        {
-          email: authData.email,
-          password: authData.password,
-          returnSecureToken: true,
-        }
-      )
-        .then(response => {
-          commit('updateIdToken',response.data.idToken);
-          router.push('/dashboard');
-        });
-      },
-      // ユーザーネーム処理
-      // updateUserName({commit},userName){
-      //   commit('updateUserName',userName);
-      // }
+  actions: {
+
+  },
+  modules: {
+    UserProfileInfo,
+    UserCreatedClasses,
+    onPages
   }
 });
