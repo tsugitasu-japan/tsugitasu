@@ -1,9 +1,15 @@
-name: Action Sample
+name: Auto Build & Deploy
 
+# on:
+#   push:
+#     branches: 
+#       - master
+#   workflow_dispatch:
 on:
-  push:
-    branches: 
-      - master
+  pull_request:
+    types:
+      - closed
+  # 手動実行を可能にする
   workflow_dispatch:
 
 jobs:
@@ -13,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main  # リポジトリをチェックアウト
 
-      - name: Install python and so on
+      - name: Install python and the other libraries
         run: sudo apt update && sudo apt install -y python2 make g++
       
       - name: Use Node.js 12.21
