@@ -17,13 +17,15 @@
             <input class="signup_input_pass" type="password" v-model="password" ref="passInput">
             <!-- パスワードの表示・非表示の切り替え -->
             <div class="change_button" @click="changeTypePass">
-              <img src="../assets/eye-off.svg" v-if="!showPass">
-              <img src="../assets/eye-on.svg" v-if="showPass">
+              <img src="../assets/eye-off.svg" v-show="!showPass">
+              <img src="../assets/eye-on.svg" v-show="showPass">
             </div>
           </div>
         </div>
       </div>
-      <button class="submit_button"  v-bind:disabled="!isLoginSubmitButtonActive" @click="login">ログイン</button>
+      <!-- エラー時表示 -->
+      <p v-show="loginError" class="error_message">パスワードに誤りがあります</p>
+      <button class="submit_button" v-bind:disabled="!isLoginSubmitButtonActive" @click="login">ログイン</button>
       <router-link to="/" class="check_link">パスワードをお忘れの方</router-link>
     </div>
   </section>
@@ -31,43 +33,26 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
       email: '',
       password: '',
       showPass: true,
+      loginError: false,
     };
   },
   computed: {
-
-    // isPassValid() {
-    //   // 空の時はバリデーションなし
-    //   if (this.pass === '') return true;
-    //   // 半角英数字をそれぞれ1種類以上含む8文字以上100文字以下の正規表現
-    //   const checker = new RegExp(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i);
-    //   //指定した組み合わせになっていなかった場合判定を返す。
-    //   if (checker.test(this.pass)) return true;
-    //   return false;
-    // },
-    // isEmailValid() {
-    //   // 空の時はバリデーションなし
-    //   if (this.email === '') return true;
-    //   //メールアドレスとして判定される文字列と記号の組み合わせを定数化
-    //   const reg = new RegExp(/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/);
-    //   //指定した組み合わせになっていなかった場合判定を返す。
-    //   if (reg.test(this.email)) return true;
-    //   return false;
-    // },
-
     // 全てに入力されているかをバリデーション
-
-
     isLoginSubmitButtonActive() {
       if (this.email != '' && this.password != '') return true;
       return false;
+    },
+    // エラー文の表示
+    getErrorMessage(){
+      return this.$store.state.UserProfileInfo.errorMessage;
     }
-
   },
   methods: {
     // パスワードの表示・非表示を変更するメソッド
@@ -84,26 +69,22 @@ export default {
     },
     // ログイン情報を送信 Axios
     login() {
-      this.$store.dispatch('login',{
-        email:this.email,
-        password:this.password,
-      });
-      this.email = '';
-      this.password = '';
+      this.$store.dispatch('userLogin', {
+        email: this.email,
+        password: this.password,
+      })
+      console.log(this.errorMessage)
     }
-  }
-
+  },
 }
 </script>
 
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-// @import url("yakuhanjp/dist/scss/yakuhanjp_s");
 $main-color: #13CCCE;
 $main-hover: #26ABAD;
 $black: #2B2B2B;
-// $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
 $main-font-family: 'Noto Sans JP', sans-serif;
 
 section {
@@ -197,15 +178,6 @@ section {
             }
           }
         }
-
-        .login_require {
-          font-family: $main-font-family;
-          color: #FE0F33;
-          font-size: 11px;
-          font-weight: 400;
-          margin-left: 3px;
-          display: block;
-        }
       }
 
       .login_input {
@@ -228,6 +200,16 @@ section {
           outline: transparent;
         }
       }
+    }
+
+    .error_message {
+      align-items: center;
+      font-family: $main-font-family;
+      color: #FE0F33;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.44px;
+      text-align: center;
     }
 
     .submit_button {

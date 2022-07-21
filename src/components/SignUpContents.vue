@@ -22,7 +22,7 @@
               <p class="signup_require">必須</p>
             </div>
             <input class="signup_input_email" type="email" v-model.lazy="email">
-            <p class="input_request" v-if="!isEmailValid">メールアドレスの形式が正しくありません。</p>
+            <p class="input_request" v-show="!isEmailValid">メールアドレスの形式が正しくありません。</p>
           </div>
 
           <div class="signup_set">
@@ -35,11 +35,11 @@
                 ref="passInput">
               <!-- パスワードの表示・非表示の切り替え -->
               <div class="change_button" @click="changeTypePass">
-                <img src="../assets/eye-off.svg" v-if="!showPass">
-                <img src="../assets/eye-on.svg" v-if="showPass">
+                <img src="../assets/eye-off.svg" v-show="!showPass">
+                <img src="../assets/eye-on.svg" v-show="showPass">
               </div>
             </div>
-            <p class="input_request" v-if="!isPassValid">パスワードは8文字以上かつ半角英数字をそれぞれ<br>1種類以上含む必要があります</p>
+            <p class="input_request" v-show="!isPassValid">パスワードは8文字以上かつ半角英数字をそれぞれ<br>1種類以上含む必要があります</p>
           </div>
 
           <div class="signup_set">
@@ -49,7 +49,7 @@
               <p class="signup_require">必須</p>
             </div>
             <input class="signup_input_name" type="text" v-model="username">
-            <p class="input_request" v-if="!isNameValid">名前は20字以内で入力してください。</p>
+            <p class="input_request" v-show="!isNameValid">名前は20字以内で入力してください。</p>
           </div>
           <div class="check_area">
             <p class="signup_check">
@@ -129,7 +129,7 @@ export default {
       this.$store.dispatch('signUpUser', {
         email: this.email,
         password: this.password,
-        username: this.username
+        nickname: this.username
       });
       this.username = '';
       this.email = '';
@@ -142,11 +142,9 @@ export default {
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-// @import url("yakuhanjp/dist/scss/yakuhanjp_s");
 $main-color: #13CCCE;
 $main-hover: #26ABAD;
 $black: #2B2B2B;
-// $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
 $main-font-family: 'Noto Sans JP', sans-serif;
 
 .content_layout {

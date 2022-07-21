@@ -18,12 +18,13 @@
         </button>
       </div>
       <!-- プロフィールメニュー -->
-      <div class="profile_menu_opner profile_menu_opner_circle" @click="isOpenMenu" :style="{ 'background-image': 'url(' + iconUrl + ')' }"></div>
+      <div class="profile_menu_opner profile_menu_opner_circle" @click="isOpenMenu"
+        :style="{ 'background-image': 'url(' + iconUrl + ')' }"></div>
       <div class="profile_menu_contnair" v-show="isShowMenu">
         <div class="profile_changeshow">
           <p class="prfile_name_p menu_margin name_width">{{ username }}</p>
           <routerLink to="/profile" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
-          <routerLink to="/" class="prfile_menu_p prfile_menu_link_style">ログアウト</routerLink>
+          <span class="logout_menu" @click="logout">ログアウト</span>
         </div>
       </div>
 
@@ -42,19 +43,25 @@ export default {
       SeachKeywords: '',
       isShowMenu: false,
       username: '',
-      iconUrl:'' 
+      iconUrl: ''
     }
   },
   computed: {
     image_src() { return this.$store.state.signUp.backgroudUrl }
   },
   methods: {
+    // メニューアイコン開閉
     isOpenMenu() {
       this.isShowMenu = !this.isShowMenu;
     },
+    // ユーザー情報の取得
     getUserInfo() {
       this.username = this.$store.state.UserProfileInfo.username;
       this.iconUrl = this.$store.state.UserProfileInfo.iconUrl;
+    },
+    // ログアウト
+    logout(){
+      this.$store.dispatch('logout');
     }
   },
   created() {
@@ -192,6 +199,7 @@ header {
       transition: .2s;
       z-index: 100;
     }
+
     .profile_changeshow {
       display: flex;
       flex-direction: column;
@@ -220,16 +228,31 @@ header {
         }
       }
 
+      .logout_menu {
+        letter-spacing: 0.4px;
+        color: #7F7F7F;
+        font-family: $main-font-family;
+        font-weight: 400;
+        font-size: 14px;
+        transition: .15s;
+        display: block;
+        cursor: pointer;
+
+        &:hover {
+          color: $main-hover;
+        }
+      }
+
       .prfile_menu_link_style {
         text-decoration: none;
         display: inline-block;
       }
 
       .menu_margin {
-        margin-bottom: 14px;
+        margin-bottom: 15px;
       }
 
-      .name_width{
+      .name_width {
         width: 100%;
       }
     }
