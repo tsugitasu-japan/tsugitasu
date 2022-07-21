@@ -9,25 +9,96 @@ import LamdaTest from './components/LamdaTest.vue';
 import CreateAuth from './views/CreateAuth.vue';
 import ProfileEdit from './views/ProfileEdit.vue';
 import DashboardGroupView from './views/DashboardGroupView.vue';
-import Cropper from './components/Cropper.vue';
+import { store } from './store';
 
 export default createRouter({
   history: createWebHistory(),
   routes: [
-    {path: "/" , component: Index},
-    {path: "/signup" , component: SignUp},
-    {path:'/login' , component: Login},
-    {path: '/auth' , component: CreateAuth},
+    { path: "/", component: Index },
     // 動作確認用
-    {path:'/cropper',component: Cropper},
-    {path:'/test' , component: LamdaTest},
+    { path: '/test', component: LamdaTest },
+    // ログインが不必要
+    {
+      path: "/signup", component: SignUp,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next('/dashboard/class');
+        } else {
+          next()
+        }
+      }
+    },
+    {
+      path: '/login', component: Login,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next('/dashboard/class');
+        } else {
+          next()
+        }
+      }
+    },
+    {
+      path: '/auth', component: CreateAuth,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next('/dashboard/class');
+        } else {
+          next()
+        }
+      }
+    },
 
-
-    // 動的なリンク作成
-    {path:'/dashboard/class', component: Dashboard},
-    {path:'/dashboard/group', component: DashboardGroupView},
-    {path:'/profile', component: Profile},
-    {path:'/profile/edit', component: ProfileEdit},
-    {path:'/dashboard/class/createclass', component: CreateClass},
+    // ログインが必要
+    {
+      path: '/dashboard/class', component: Dashboard,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next();
+        } else {
+          next('login')
+        }
+      }
+    },
+    {
+      path: '/dashboard/group', component: DashboardGroupView,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next();
+        } else {
+          next('login')
+        }
+      }
+    },
+    {
+      path: '/profile', component: Profile,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next();
+        } else {
+          next('login')
+        }
+      }
+    },
+    {
+      path: '/profile/edit', component: ProfileEdit,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next();
+        } else {
+          next('login')
+        }
+      }
+    },
+    {
+      path: '/dashboard/class/createclass', component: CreateClass,
+      beforeEnter(to, from, next) {
+        if (store.getters.idTokne) {
+          next();
+        } else {
+          next('login')
+        }
+      }
+    },
   ]
 })
