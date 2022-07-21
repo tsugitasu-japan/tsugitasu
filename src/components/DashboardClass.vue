@@ -37,14 +37,12 @@
           <div class="my_created_class_icon" :class="userClassList.selectedBgColor">
             <img class="my_create_class_mark_layout my_create_class_mark_size" :src="userClassList.iconSrc">
           </div>
-          <!-- <p class="my_created_class_name class_name_margin">{{ userClassList.className }}</p> -->
           <p class="my_created_class_name class_name_margin">{{ cutClassName(userClassList.className) }}</p>
         </div>
         <router-link class="my_created_class_contnair" to="/dashboard/class/createclass">
           <img src="../assets/newclass.svg" class="my_created_class_icon">
           <p class="my_created_class_new class_name_margin"> 新規作成 </p>
         </router-link>
-        <!-- {{userClassLists}} -->
       </div>
     </div>
   </div>
@@ -71,8 +69,6 @@ export default {
   methods: {
     getCreateClassData() {
       this.userClassLists = this.$store.state.UserCreatedClasses.createClasses;
-      let many = Object.keys(this.userClassLists).length;
-      console.log(many);
     },
     // 授業名の表示文字数制限
     cutClassName(text) {

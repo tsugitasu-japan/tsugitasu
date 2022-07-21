@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import router from '../router';
 
 export default {
   data() {
@@ -55,10 +57,23 @@ export default {
     },
     // サーバーに認証コードを送信 Axios
     postAuthNum() {
-      this.$store.dispatch('postAuthNum', {
-        email: this.email,
-        authNum: this.authNum,
-      })
+      axios.post(
+        // LamdaURL
+        'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/user/entry/prd',
+        {
+          "email": this.email,
+          "confirmation_code": this.authNum
+        }
+      )
+        // 成功時
+        .then(response => {
+          console.log(response);
+          router.push('/login');
+        })
+        .catch(error => {
+          console.log(error);
+          this.authError = true;
+        });
       this.authNum = '';
     },
     getUserEmail() {
@@ -74,11 +89,9 @@ export default {
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-// @import url("yakuhanjp/dist/scss/yakuhanjp_s");
 $main-color: #13CCCE;
 $main-hover: #26ABAD;
 $black: #2B2B2B;
-// $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
 $main-font-family: 'Noto Sans JP', sans-serif;
 
 section {
