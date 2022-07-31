@@ -1,9 +1,9 @@
-// import axios from 'axios';
+import axios from 'axios';
 import router from "../../router";
 
 // ユーザ作成授業情報
 const state = {
-  createClasses:[],
+  createClasses: [],
 };
 
 const getters = {};
@@ -37,13 +37,63 @@ const mutations = {
 
 const actions = {
 
-  // 作成授業情報を送信
+  // 作成した授業情報を送信
   createClass({ commit }, createClassData) {
-    commit('registerClass', createClassData);
-    // commit('registerClassName', createClassData.className);
-    // console.log(createClassData);
-    router.push('/dashboard/class')
+    axios.post(
+      // LamdaURL
+      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/create/lesson',
+      {
+        "lesson_name": createClassData.className,
+        "created_by": createClassData.createPerson,
+        "outline": createClassData.classExp,
+        "Public": createClassData.selectedRelease,
+        "icon": {
+          "color": createClassData.selectedBgColor,
+          "file_name": createClassData.iconSrc,
+        },
+        "materials": [
+          "qhptr95",
+          "jav3o39"
+        ],
+        "tags": createClassData.classTags,
+      },
+      { headers: { "Authorization": createClassData.idToken } }
+    )
+      // 成功時
+      .then(response => {
+        console.log(response);
+        commit('registerClass', createClassData);
+        router.push('/dashboard/class');
+      })
+      .catch(error => {
+        alert("登録に失敗しました。もう一度送信してください。");
+        console.log(error);
+        this.authError = true;
+      });
+  },
+  // 作成した授業情報を受信
+  getCreatedClass({ commit }, userData) {
+    axios.get(
+      // LamdaURL
+      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/retrieve/lesson',
+      {
+        params: { user_id: userData.userName },
+        headers: { "Authorization": userData.idToken }
+      },
+
+    )
+      // 成功時
+      .then(response => {
+        console.log(response);
+        commit('registerClass');
+      })
+      .catch(error => {
+        alert("読み込みに失敗しました。もう一度送信してください。");
+        console.log(error);
+        this.authError = true;
+      });
   }
+
 };
 
 export default {

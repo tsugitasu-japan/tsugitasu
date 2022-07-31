@@ -18,24 +18,23 @@
         </button>
       </div>
       <!-- プロフィールメニュー -->
-      <div class="profile_menu_opner profile_menu_opner_circle" @click="isOpenMenu"
-        :style="{ 'background-image': 'url(' + iconUrl + ')' }"></div>
-      <div class="profile_menu_contnair" v-show="isShowMenu">
-        <div class="profile_changeshow">
-          <p class="prfile_name_p menu_margin name_width">{{ username }}</p>
-          <routerLink to="/profile" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
-          <span class="logout_menu" @click="logout">ログアウト</span>
+      <div ref="elRoot">
+        <div class="profile_menu_opner profile_menu_opner_circle" @click="isOpenMenu"
+          :style="{ 'background-image': 'url(' + iconUrl + ')' }"></div>
+        <div class="profile_menu_contnair" v-show="isShowMenu">
+          <div class="profile_changeshow">
+            <p class="prfile_name_p menu_margin name_width">{{ username }}</p>
+            <routerLink to="/profile" class="prfile_menu_p prfile_menu_link_style menu_margin">マイプロフィール</routerLink>
+            <span class="logout_menu" @click="logout">ログアウト</span>
+          </div>
         </div>
       </div>
-
     </div>
 
   </header>
-
 </template>
 
 <script>
-// import axios from 'axios'
 
 export default {
   data() {
@@ -60,13 +59,25 @@ export default {
       this.iconUrl = this.$store.state.UserProfileInfo.iconUrl;
     },
     // ログアウト
-    logout(){
-      this.$store.dispatch('logout');
+    logout() {
+      this.$store.dispatch('signOut');
     }
   },
   created() {
     this.getUserInfo()
-  }
+  },
+  mounted() {
+    window.addEventListener('click', this._onBlurHandler = (event) => {
+      // targetがコンポーネントの中に含まれているものなら何もしない
+      if (this.$refs.elRoot.contains(event.target)) {
+        return;
+      }
+      this.$data.isShowMenu = false;
+    });
+  },
+  beforeUnmount() {
+    window.removeEventListener('click', this._onBlurHandler);
+  },
 }
 </script>
 
@@ -152,8 +163,8 @@ header {
     }
 
     .profile_menu_opner_circle {
-      width: 36px;
-      height: 36px;
+      width: 37px;
+      height: 37px;
       border-radius: 50%;
       background-size: cover;
       cursor: pointer;
@@ -195,7 +206,7 @@ header {
       background-color: #FFFFFF;
       box-shadow: 0px 3px 20px rgba(75, 75, 75, 0.16);
       border-radius: 4px;
-      padding: 14px 13px 14px 13px;
+      padding: 15px 14px 15px 14px;
       transition: .2s;
       z-index: 100;
     }
