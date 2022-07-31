@@ -127,6 +127,7 @@ export default {
     // サーバーに作成ユーザー情報を送信 Axios
     signUpUser() {
       this.$store.dispatch('signUpUser', {
+        username: this.email,
         email: this.email,
         password: this.password,
         nickname: this.username

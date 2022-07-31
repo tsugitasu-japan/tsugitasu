@@ -3,6 +3,7 @@ import {createStore} from 'vuex'
 import UserProfileInfo from './modules/UserProfileInfo'
 import UserCreatedClasses from './modules/UserCreatedClasses'
 import onPages from './modules/onPages'
+import loading from './modules/loading'
 import createPersistedState from 'vuex-persistedstate'
 
 export const store = createStore({
@@ -13,7 +14,8 @@ export const store = createStore({
   modules: {
     UserProfileInfo,
     UserCreatedClasses,
-    onPages
+    onPages,
+    loading,
   },
   plugins: [createPersistedState(
     { 

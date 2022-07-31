@@ -5,7 +5,9 @@
       <div class="auth_contnair_top">
         <h1 class='auth_title'>本人確認</h1>
         <p class="auth_user_email auth_user_email_margin">{{ email }}</p>
-        <button class="repost_auth_code_button">認証コードを再送する</button>
+        <span class="repost_auth_code_button" v-show="!resend" @click="resendConfirmationCode">認証コードを再送する</span>
+        <p class="repost_auth_code_success" v-show="resendSucces">送信しました !</p>
+        <p class="repost_auth_code_error" v-show="resendError">送信に失敗しました</p>
       </div>
 
       <div class="auth_number_input_contnair">
@@ -19,16 +21,14 @@
 
       <div class="auth_contnair_bottom">
         <p class="auth_explain">認証用コードを上記のアドレスに送信しました<br>続けるにはコードを入力してください</p>
-        <button class="submit_button" v-bind:disabled="!isAuthSubmitButtonActive" @click="postAuthNum">認証</button>
+        <button class="submit_button" v-bind:disabled="!isAuthSubmitButtonActive" @click="AuthSignUp">認証</button>
       </div>
     </div>
-
   </section>
 </template>
 
 <script>
-import axios from 'axios';
-import router from '../router';
+import { Auth } from 'aws-amplify';
 
 export default {
   data() {
@@ -37,6 +37,10 @@ export default {
       authError: false,
       // 認証コード
       authNum: '',
+      resend: false,
+      resendError: false,
+      resendSucces: false,
+      password: '',
     }
   },
   computed: {
@@ -50,38 +54,62 @@ export default {
     // (自作)全角数字を入力・貼り付けされたときは半角数字に変換し,数字以外の入力・貼り付けがあったときは文字を除去
     myfilter(event) {
       let value = event.target.value.replace(/[０-９]/g, function (x) { return String.fromCharCode(x.charCodeAt(0) - 0xFEE0) }).replace(/[^0-9]/g, '');
-      console.log(value);
       this.authNum = value;
       // 強制的に再描画しないと、表示と実際の値がずれる
       this.$forceUpdate();
     },
-    // サーバーに認証コードを送信 Axios
-    postAuthNum() {
-      axios.post(
-        // LamdaURL
-        'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/user/entry/prd',
-        {
-          "email": this.email,
-          "confirmation_code": this.authNum
-        }
-      )
-        // 成功時
-        .then(response => {
-          console.log(response);
-          router.push('/login');
-        })
-        .catch(error => {
-          console.log(error);
-          this.authError = true;
+    // サーバーに認証コードを送信
+    async AuthSignUp() {
+      const username = this.email;
+      const code = this.authNum;
+      try {
+        await Auth.confirmSignUp(username, code);
+        this.$store.dispatch('userLogin', {
+          email: this.email,
+          password: this.password,
         });
+      } catch (error) {
+        console.log('error confirming sign up', error);
+        this.authError = true;
+      }
       this.authNum = '';
     },
-    getUserEmail() {
+
+    // 認証コード再送
+    async resendConfirmationCode() {
+      const username = this.email;
+      try {
+        await Auth.resendSignUp(username);
+        console.log('code resent successfully');
+        this.resend = true;
+        this.resendSucces = true;
+        // setTimeoutで2500ms後にshowをresendにする
+        setTimeout(() => {
+          this.resend = false;
+          this.resendSucces = false;
+        }
+          , 2500
+        );
+      } catch (err) {
+        console.log('error resending code: ', err);
+        this.resend = true;
+        this.resendError = true,
+          // setTimeoutで2500ms後にshowをresendにする
+          setTimeout(() => {
+            this.resend = false
+            this.resendError = false;
+          }
+            , 2500
+          );
+      }
+    },
+    getUserInfo() {
       this.email = this.$store.state.UserProfileInfo.email;
-    }
+      this.password = this.$store.state.UserProfileInfo.password;
+    },
   },
   created() {
-    this.getUserEmail();
+    this.getUserInfo();
   }
 }
 </script>
@@ -126,7 +154,7 @@ section {
       }
 
       .auth_user_email_margin {
-        margin: 14px 0px 14px 0px;
+        margin: 14px 0px 16px 0px;
       }
 
       .repost_auth_code_button {
@@ -139,10 +167,34 @@ section {
         background-color: transparent;
         border: none;
         transition: .1s;
+        cursor: pointer;
 
         &:hover {
           color: $main-color;
         }
+      }
+
+      .repost_auth_code_success {
+        font-family: $main-font-family;
+        color: $black;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.44px;
+        text-align: center;
+        background-color: transparent;
+        border: none;
+      }
+
+      .repost_auth_code_error {
+        font-family: $main-font-family;
+        color: #FE0F33;
+        ;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.44px;
+        text-align: center;
+        background-color: transparent;
+        border: none;
       }
     }
 

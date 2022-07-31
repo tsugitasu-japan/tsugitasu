@@ -70,8 +70,8 @@
       </div>
       <!-- セッティング詳細 -->
       <div class="classname_setting_inner" v-show="isClassNameSettingOpen">
-        <input class="classname_input" type="text" placeholder="授業名を記入してください（20文字以内）" v-model.trim="className" maxlength="20"
-          :class="{ caution_on: shouldSetCaution }">
+        <input class="classname_input" type="text" placeholder="授業名を記入してください（20文字以内）" v-model.trim="className"
+          maxlength="20" :class="{ caution_on: shouldSetCaution }">
         <p class="classname_caution" v-show="shouldSetCaution">※ 授業名は必須項目です</p>
       </div>
     </section>
@@ -128,26 +128,26 @@
       <!-- セッティング詳細 -->
       <div class="classrelease_setting_inner" v-show="isClassReleaseSettingOpen">
         <div class="release_setting_radio_button_area">
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting('public')">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'public' }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('Public')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'Public' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'public' }">パブリック</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'Public' }">パブリック</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting('private')">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'private' }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('Private')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'Private' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'private' }">プライベート</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'Private' }">プライベート</p>
           </div>
-          <div class="release_setting_radio_button" @click="SelectReleaseSetting('allowed')">
-            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'allowed' }">
+          <div class="release_setting_radio_button" @click="SelectReleaseSetting('Allowed')">
+            <div class="circle circle_margin" :class="{ circle_on: selectedRelease === 'Allowed' }">
             </div>
-            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'allowed' }">許可した人のみ</p>
+            <p class="radio_button_label" :class="{ radio_button_label_on: selectedRelease === 'Allowed' }">許可した人のみ</p>
           </div>
         </div>
         <div class="release_selected_explain_area">
-          <p class="release_selected_explain" v-show="selectedRelease === 'public'">誰でもあなたの授業を閲覧し、参考にすることができます</p>
-          <p class="release_selected_explain" v-show="selectedRelease === 'private'">あなたのみが閲覧・編集できます</p>
-          <p class="release_selected_explain" v-show="selectedRelease === 'allowed'">あなたの許可した人物のみが閲覧できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'Public'">誰でもあなたの授業を閲覧し、参考にすることができます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'Private'">あなたのみが閲覧・編集できます</p>
+          <p class="release_selected_explain" v-show="selectedRelease === 'Allowed'">あなたの許可した人物のみが閲覧できます</p>
         </div>
       </div>
     </section>
@@ -320,10 +320,7 @@ export default {
       iconOffSrc: require('@/assets/icon-off-fill/meeting-off.svg'),
       selectedBgColor: 'yellow',
       classTags: [],
-      selectedRelease: 'public',
-
-      // 作成した授業の連想配列、送信時に要素を追加
-      createClassInfo: []
+      selectedRelease: 'Public',
     }
   },
   computed: {
@@ -336,12 +333,15 @@ export default {
         return false;
       }
     },
-    isSubmitButtonActive(){
-      if(this.shouldSetCaution === true)
-      return true
+    isSubmitButtonActive() {
+      if (this.shouldSetCaution === true)
+        return true
       return false
-
-    }
+    },
+    // idTokenの取得
+    idToken() {
+      return this.$store.getters.idToken;
+    },
   },
   // タグ配列を監視して空かどうかで表示文の有無を変更
   watch: {
@@ -408,7 +408,6 @@ export default {
 
     // 作成授業情報を送信 ‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-----------------------------------
     createClass() {
-
       // Vuexを更新
       this.$store.dispatch('createClass', {
         className: this.className,
@@ -418,8 +417,9 @@ export default {
         selectedBgColor: this.selectedBgColor,
         classTags: this.classTags,
         selectedRelease: this.selectedRelease,
+        createPerson: this.$store.state.UserProfileInfo.userIdentification,
+        idToken: this.idToken,
       });
-      console.log('push')
     }
   },
 }
@@ -429,7 +429,6 @@ export default {
 <style scoped lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
-// @import url("yakuhanjp/dist/scss/yakuhanjp_s");
 $main-color: #13CCCE;
 $main-hover: #26ABAD;
 $black: #2B2B2B;
@@ -451,7 +450,7 @@ $pink: #F26FB2;
 $blood: #AA5D5D;
 $grey: #C7C4C4;
 $lightblack: #6D6E6F;
-// $main-font-family:'メイリオ', 'Meiryo','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
+
 $main-font-family: 'Noto Sans JP', sans-serif;
 
 

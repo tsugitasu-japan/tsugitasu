@@ -13,13 +13,7 @@ const mutations = {
   },
 };
 
-const actions = {
-  // setTimeGet ({ commit },Data) {
-  //   setTimeout(() => {
-  //     commit('getOnPageData',Data)
-  //   }, 1000)
-  // }
-}
+const actions = {}
 
 export default {
   state,

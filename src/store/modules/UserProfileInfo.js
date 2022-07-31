@@ -1,5 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
 import router from '../../router';
+// Amplify系インストール
+import { Amplify, Auth } from 'aws-amplify';
+import AwsConfigAuth from '../../aws-config/auth';
+Amplify.configure(AwsConfigAuth);
 
 // ユーザプロフィール情報
 const state = {
@@ -7,24 +11,34 @@ const state = {
   selfIntroduction: '',
   username: '',
   email: '',
-  password: '',
-  idTokne: null,
+  userIdentification: null,
+  idToken: null,
+  password: null,
 };
 
 const getters = {
-  idTokne: state => state.idTokne
+  idToken: state => state.idToken
 };
 
 const mutations = {
-  // ユーザー登録
-  registerUsername(state, userName) {
-    state.username = userName;
+  // Amplyfyからユーザー情報を取得
+  getUserInfo(state, userInfo) {
+    state.email = userInfo.username;
+    state.idToken = userInfo.signInUserSession.idToken.jwtToken;
+    state.username = userInfo.attributes.nickname;
+    state.userIdentification = userInfo.attributes.sub;
   },
-  registerEmail(state, email) {
-    state.email = email;
+  registerUserInfo(state, registerInfo){
+    state.email = registerInfo.username;
   },
-  registerPassword(state, password) {
+  setPassword(state, password){
     state.password = password;
+  },
+  logout(state) {
+    state.email = '';
+    state.idToken = null;
+    state.username = '';
+    state.password = null;
   },
   // プロフィール変更
   updateUsername(state, username) {
@@ -37,86 +51,56 @@ const mutations = {
     state.iconUrl = iconUrl;
   },
   // IDトークンをセット
-  updateIdTokne(state, idTokne) {
-    state.idTokne = idTokne;
+  updateidToken(state, idToken) {
+    state.idToken = idToken;
   }
-  // エラーメッセージ
-  // setErrorMessage(state, errorMessage) {
-  //   state.errorMessage = errorMessage
-  // }
 };
 
 const actions = {
-  // サーバーに作成ユーザー情報を送信
-  signUpUser({ commit }, registerData) {
-    axios.post(
-      // LamdaURL
-      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/user/entry/tmp',
-      {
-        "email": registerData.email,
-        "password": registerData.password,
-        "nickname": registerData.nickname
-      }
-    )
-      // 成功時
-      .then(response => {
-        commit('registerUsername', registerData.nickname);
-        commit('registerEmail', registerData.email);
-        commit('registerPassword', registerData.password);
-        console.log(response);
-        router.push('/auth');
+
+  // AmplyfyAuth関連-----------------------------------------------------------------------------------------------
+
+  // サインアップ AWS Amplify
+  async signUpUser({ commit }, signUpInfo) {
+    try {
+      const { user } = await Auth.signUp({
+        username: signUpInfo.username,
+        password: signUpInfo.password,
+        attributes: {
+          email: signUpInfo.email,
+          nickname: signUpInfo.nickname,
+        },
       });
+      commit('registerUserInfo', user);
+      commit('setPassword', signUpInfo.password)
+      console.log(user);
+      router.push('/auth');
+    } catch (error) {
+      console.log('error signing up:', error);
+    }
   },
 
-  // // 仮登録後認証コード送信
-  // postAuthNum({ commit },authData) {
-  //   axios.post(
-  //     // LamdaURL
-  //     'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/user/entry/prd',
-  //     {
-  //       "email": authData.email,
-  //       "confirmation_code": authData.authNum
-  //     }
-  //   )
-  //     // 成功時
-  //     .then(response => {
-  //       console.log(response);
-  //       commit('registerEmail', authData.email);
-  //       router.push('/dashboard/class');
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //       console.log('moov');
+  // ログインawsAmplify
+  async userLogin({ commit }, loginInfo) {
+    try {
+      const user = await Auth.signIn(loginInfo.email, loginInfo.password);
+      console.log(user);
+      commit('getUserInfo', user);
+      router.push('/dashboard/class');
+    } catch (error) {
+      console.log('error signing in', error);
+    }
+  },
 
-  //     });
-  // },
-
-  // ログイン
-  userLogin({ commit }, loginInfo) {
-    axios.post(
-      // LamdaURL
-      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/user/login/',
-      {
-        "email": loginInfo.email,
-        "password": loginInfo.password
-      }
-    )
-      // 成功時
-      .then(response => {
-        console.log(response);
-        commit('updateIdTokne', response.data.IdToken);
-        router.push('/dashboard/class');
-      })
-      // エラー時
-      .catch(error => {
-        console.log(error);
-        switch (error.response?.status) {
-          case 400:
-            console.log('passworderror');
-          // const errorMessage ="パスワードに誤りがあります";
-          // commit('setErrorMessage', errorMessage)
-        }
-      });
+  // ログアウト
+  async signOut({ commit }) {
+    try {
+      await Auth.signOut();
+      router.push('/');
+      commit('logout');
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
   },
 
   // プロフィール変更
@@ -126,14 +110,7 @@ const actions = {
     commit('updateIconUrl', userProfile.iconUrl);
     router.push('/profile');
   },
-
-  // ログアウト
-  logout({commit}) {
-    commit('updateIdTokne', null)
-  }
-
-};
-
+}
 export default {
   state,
   getters,

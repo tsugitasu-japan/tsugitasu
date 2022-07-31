@@ -64,23 +64,36 @@ export default {
       else
         return true
     },
-
+    // idTokenの取得
+    idToken() {
+      return this.$store.getters.idToken;
+    },
   },
   methods: {
+    // 作成した授業情報を取得
     getCreateClassData() {
       this.userClassLists = this.$store.state.UserCreatedClasses.createClasses;
     },
+    // 作成した授業情報を取得
+    getCreatedClassLambda() {
+      this.$store.dispatch('getCreatedClass', {
+        userName: this.$store.state.UserProfileInfo.userIdentification,
+        idToken: this.idToken,
+      });
+    },
+
     // 授業名の表示文字数制限
     cutClassName(text) {
-      if(text.length > 14){
+      if (text.length > 14) {
         return text.substring(0, 14) + '...'
       }
-      else{
+      else {
         return text;
       }
     }
   },
   created() {
+    this.getCreatedClassLambda();
     this.getCreateClassData();
   }
 }

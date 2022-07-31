@@ -10,9 +10,9 @@
           <p class="profile_username_style username_padding">{{ username }}</p>
           <p class="profile_selfintro_style profile_selfintro_contnair">{{ selfIntroduction }}</p>
           <div class="follow_info_area">
-            <router-link to="/profile/following" class="follow_info_style follow_info_margin_r"><span
+            <router-link to="/profile" class="follow_info_style follow_info_margin_r"><span
                 class="follow_num_style">{{ followNum }}</span> フォロー</router-link>
-            <router-link to="/profile/followers" class="follow_info_style"><span class="follow_num_style">{{ followerNum
+            <router-link to="/profile" class="follow_info_style"><span class="follow_num_style">{{ followerNum
             }}</span> フォロワー</router-link>
           </div>
         </div>

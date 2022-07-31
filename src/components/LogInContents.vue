@@ -26,7 +26,7 @@
       <!-- エラー時表示 -->
       <p v-show="loginError" class="error_message">パスワードに誤りがあります</p>
       <button class="submit_button" v-bind:disabled="!isLoginSubmitButtonActive" @click="login">ログイン</button>
-      <router-link to="/" class="check_link">パスワードをお忘れの方</router-link>
+      <router-link to="/forgetpassword" class="check_link">パスワードをお忘れの方</router-link>
     </div>
   </section>
 
@@ -50,7 +50,7 @@ export default {
       return false;
     },
     // エラー文の表示
-    getErrorMessage(){
+    getErrorMessage() {
       return this.$store.state.UserProfileInfo.errorMessage;
     }
   },
@@ -67,14 +67,13 @@ export default {
         this.showPass = true;
       }
     },
-    // ログイン情報を送信 Axios
+    // ログイン情報を送信
     login() {
       this.$store.dispatch('userLogin', {
         email: this.email,
         password: this.password,
       })
-      console.log(this.errorMessage)
-    }
+    },
   },
 }
 </script>
@@ -186,7 +185,7 @@ section {
         font-weight: 400;
         color: $black;
         width: 340px;
-        height: 40px;
+        height: 41px;
         margin-top: 8px;
         border-radius: 2px;
         border: solid 1px #E6E6E6;
@@ -230,6 +229,7 @@ section {
 
       &:valid {
         background-color: $main-color;
+        cursor: pointer;
 
         &:hover {
           background-color: $main-hover;

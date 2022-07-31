@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="create_button">
-        <router-link class="link_create_button" to="/dashboard/creategroup">
+        <router-link class="link_create_button" to="/dashboard/class">
           <div class="create_button_text">新規作成</div>
         </router-link>
       </div>
@@ -25,7 +25,7 @@
             一緒に授業を作成したり、チームメンバーと協力。<br>
             コンテンツ作成をチームメンバーで思いのままに
           </p>
-          <router-link class="link_create_group_button" to="/dashboard/creategroup">
+          <router-link class="link_create_group_button" to="/dashboard/class">
             <div class="create_button_group_text">グループを作成</div>
           </router-link>
         </div>

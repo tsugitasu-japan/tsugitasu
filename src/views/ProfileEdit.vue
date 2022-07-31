@@ -1,5 +1,5 @@
 <template>
-  <div class="prpfile">
+  <div class="profile">
     <LoginedHeader></LoginedHeader>
     <div class="content">
       <MyProfileEdit></MyProfileEdit>

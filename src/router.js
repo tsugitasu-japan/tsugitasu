@@ -9,6 +9,7 @@ import LamdaTest from './components/LamdaTest.vue';
 import CreateAuth from './views/CreateAuth.vue';
 import ProfileEdit from './views/ProfileEdit.vue';
 import DashboardGroupView from './views/DashboardGroupView.vue';
+import ForgetPassword from './views/ForgetPassword.vue';
 import { store } from './store';
 
 export default createRouter({
@@ -21,7 +22,7 @@ export default createRouter({
     {
       path: "/signup", component: SignUp,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next('/dashboard/class');
         } else {
           next()
@@ -31,7 +32,17 @@ export default createRouter({
     {
       path: '/login', component: Login,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
+          next('/dashboard/class');
+        } else {
+          next()
+        }
+      }
+    },
+    {
+      path: '/forgetpassword', component: ForgetPassword,
+      beforeEnter(to, from, next) {
+        if (store.getters.idToken) {
           next('/dashboard/class');
         } else {
           next()
@@ -41,7 +52,7 @@ export default createRouter({
     {
       path: '/auth', component: CreateAuth,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next('/dashboard/class');
         } else {
           next()
@@ -53,7 +64,7 @@ export default createRouter({
     {
       path: '/dashboard/class', component: Dashboard,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next();
         } else {
           next('login')
@@ -63,7 +74,7 @@ export default createRouter({
     {
       path: '/dashboard/group', component: DashboardGroupView,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next();
         } else {
           next('login')
@@ -73,7 +84,7 @@ export default createRouter({
     {
       path: '/profile', component: Profile,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next();
         } else {
           next('login')
@@ -83,7 +94,7 @@ export default createRouter({
     {
       path: '/profile/edit', component: ProfileEdit,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next();
         } else {
           next('login')
@@ -93,7 +104,7 @@ export default createRouter({
     {
       path: '/dashboard/class/createclass', component: CreateClass,
       beforeEnter(to, from, next) {
-        if (store.getters.idTokne) {
+        if (store.getters.idToken) {
           next();
         } else {
           next('login')
