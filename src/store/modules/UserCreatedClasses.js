@@ -41,7 +41,7 @@ const actions = {
   createClass({ commit }, createClassData) {
     axios.post(
       // LamdaURL
-      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/create/lesson',
+      'https://kr41q0luul.execute-api.ap-northeast-1.amazonaws.com/dev/create/lesson',
       {
         "lesson_name": createClassData.className,
         "created_by": createClassData.createPerson,
@@ -75,7 +75,7 @@ const actions = {
   getCreatedClass({ commit }, userData) {
     axios.get(
       // LamdaURL
-      'https://ugdhjkc6j2.execute-api.ap-northeast-1.amazonaws.com/dev/retrieve/lesson',
+      'https://kr41q0luul.execute-api.ap-northeast-1.amazonaws.com/dev/retrieve/lesson',
       {
         params: { user_id: userData.userName },
         headers: { "Authorization": userData.idToken }
