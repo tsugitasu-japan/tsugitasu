@@ -61,10 +61,9 @@
   <div class="complete_guide" v-show="stepComplete">
     <img src="../assets/complete.svg">
     <h1 class="complete_title">再設定完了</h1>
-    <P class="progress_explain">{{ sec }} 秒後に<span>
+    <p class="progress_explain">{{ sec }} 秒後に<span>
         <router-link to="/login" class="check_link">ログイン画面</router-link>
-      </span>へリダイレクトします</P>
-      <!-- <button @click="ridirectTimer(5000)">moov</button> -->
+      </span>へリダイレクトします</p>
   </div>
 </template>
 
